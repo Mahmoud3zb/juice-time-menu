@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Juice Time - عصير تايم</title>
+    <!-- استدعاء Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- استدعاء خط Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            green: '#009a74', /* لون مستوحى من الشعار */
+                            orange: '#f37021', /* لون العصير في الشعار */
+                            bg: '#f8f9fa'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #e5e7eb; /* لون رمادي خلفي يبرز إطار الهاتف على الشاشات الكبيرة */
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* إخفاء شريط التمرير الأفقي مع الحفاظ على التمرير */
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* نمط الخلفية وراء اللوجو */
+        .pattern-bg {
+            background-color: #ffffff;
+            background-image: radial-gradient(#009a74 0.5px, transparent 0.5px), radial-gradient(#009a74 0.5px, #ffffff 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            background-opacity: 0.05;
+        }
+    </style>
+</head>
+<body class="antialiased flex justify-center min-h-screen">
+
+    <!-- حاوية محاكاة شاشة الهاتف -->
+    <div class="w-full max-w-md bg-white min-h-screen relative shadow-2xl flex flex-col">
+        
+        <!-- الشريط الترحيبي العلوي -->
+        <div class="bg-brand-green text-white text-center py-1.5 text-[13px] font-semibold w-full">
+            أهلاً بكم! تم المسح بنجاح | Welcome! Scan Successful
+        </div>
+
+        <!-- منطقة الشعار -->
+        <div class="py-6 flex justify-center border-b border-gray-100 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-[0.03] pattern-bg"></div>
+            <!-- تأكد من وجود صورة اللوجو (logo.jpg) في نفس مجلد ملف الـ HTML -->
+            <img src="logo.png" alt="Juice Time" class="h-28 object-contain relative z-10" onerror="this.src='https://placehold.co/150x150/009a74/white?text=Juice+Time'">
+        </div>
+
+        <!-- شريط الأقسام (Tabs) -->
+        <div class="px-4 py-4 bg-white border-b-2 border-gray-50 z-10">
+            <ul id="categories-container" class="flex gap-2.5 overflow-x-auto hide-scroll pb-1">
+                <!-- سيتم حقن الأقسام هنا بواسطة JavaScript -->
+            </ul>
+        </div>
+
+        <!-- قائمة المنتجات -->
+        <div id="products-container" class="flex-1 bg-brand-bg p-4 flex flex-col gap-3.5 pb-24">
+            <!-- سيتم حقن المنتجات هنا بواسطة JavaScript -->
+        </div>
+
+        <!-- التذييل (Footer) -->
+        <div class="bg-white border-t-[1.5px] border-brand-green rounded-t-3xl px-5 py-3 flex justify-between items-center fixed bottom-0 w-full max-w-md shadow-[0_-10px_20px_rgba(0,0,0,0.03)] z-50">
+            <div class="flex items-center gap-3">
+                <!-- أيقونات السوشيال ميديا -->
+                <div class="flex gap-1.5 text-brand-green">
+                    <a href="#" class="w-8 h-8 rounded-full bg-brand-green/10 flex items-center justify-center hover:bg-brand-green hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592z"/></svg>
+                    </a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-brand-green/10 flex items-center justify-center hover:bg-brand-green hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/></svg>
+                    </a>
+                </div>
+                <div class="text-right">
+                    <span class="block text-gray-500 text-[10px] font-bold">اتصل بنا:</span>
+                    <span class="block text-brand-green font-bold text-sm dir-ltr">010-12345678</span>
+                </div>
+            </div>
+            <!-- الشعار المصغر -->
+            <img src="logo.png" alt="Icon" class="h-10 w-10 object-contain" onerror="this.src='https://placehold.co/40x40/009a74/white?text=U'">
+        </div>
+    </div>
+
+    <script>
+        // تعريف الأقسام كما هي في التصميم المرفق
+        const categories = [
+            { id: 'fresh', nameAr: 'عصائر طازجة', nameEn: 'Fresh Juices', img: 'https://cdn-icons-png.flaticon.com/512/3014/3014502.png' },
+            { id: 'smoothie', nameAr: 'سموثي', nameEn: 'Smoothies', img: 'https://cdn-icons-png.flaticon.com/512/2400/2400922.png' },
+            { id: 'cocktail', nameAr: 'كوكتيلات مميزة', nameEn: 'Special Cocktails', img: 'https://cdn-icons-png.flaticon.com/512/3014/3014496.png' },
+            { id: 'dessert', nameAr: 'حلويات', nameEn: 'Desserts', img: 'https://cdn-icons-png.flaticon.com/512/3014/3014535.png' }
+        ];
+
+        // بيانات المنتجات (تم تعديل العملة لتناسب مصر ج.م بدلاً من ر.س)
+        const products = [
+            { id: 1, name: 'برتقال طازج', desc: 'عصير برتقال طبيعي 100%', price: '15', category: 'fresh', iconUrl: 'https://cdn-icons-png.flaticon.com/512/3014/3014502.png' },
+            { id: 2, name: 'سموثي المانجو', desc: 'مزيج كريمي من المانجو المنعش', price: '22', category: 'smoothie', iconUrl: 'https://cdn-icons-png.flaticon.com/512/2400/2400922.png' },
+            { id: 3, name: 'خلطة "عصير تايم" الخاصة', desc: 'مزيج سري ومنعش', price: '25', category: 'cocktail', iconUrl: 'https://cdn-icons-png.flaticon.com/512/3014/3014496.png' },
+            { id: 4, name: 'كيكة الجزر', desc: 'قطعة لذيذة من كيكة الجزر الطازجة', price: '18', category: 'dessert', iconUrl: 'https://cdn-icons-png.flaticon.com/512/3014/3014535.png' }
+        ];
+
+        function renderCategories(activeId) {
+            const container = document.getElementById('categories-container');
+            container.innerHTML = '';
+
+            categories.forEach(cat => {
+                const isActive = cat.id === activeId;
+                
+                // تنسيق الزر بناءً على الحالة (نشط أو غير نشط)
+                const baseClasses = "flex flex-col items-center justify-center min-w-[95px] h-[85px] rounded-2xl transition-all duration-300 border-[1.5px] cursor-pointer flex-shrink-0";
+                const activeClasses = isActive 
+                    ? "bg-brand-green text-white border-brand-green shadow-md shadow-brand-green/20" 
+                    : "bg-white text-brand-green border-brand-green hover:bg-brand-green/5";
+                
+                // عكس ألوان الأيقونات لتبدو بيضاء إذا كان القسم نشطاً
+                const imgFilter = isActive ? "filter: brightness(0) invert(1);" : "";
+
+                const html = `
+                    <li onclick="filterProducts('${cat.id}')" class="${baseClasses} ${activeClasses}">
+                        <img src="${cat.img}" alt="${cat.nameAr}" class="w-8 h-8 object-contain mb-1" style="${imgFilter}">
+                        <span class="text-xs font-bold leading-tight mb-0.5">${cat.nameAr}</span>
+                        <span class="text-[9px] font-semibold opacity-90">${cat.nameEn}</span>
+                    </li>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+        }
+
+        function renderProducts(categoryId) {
+            const container = document.getElementById('products-container');
+            container.innerHTML = '';
+            
+            // جلب منتجات القسم المحدد أو عرض الكل
+            const filtered = products.filter(p => p.category === categoryId);
+
+            filtered.forEach(item => {
+                const html = `
+                    <div class="bg-white border-[1.5px] border-brand-green rounded-[1.25rem] p-3 flex justify-between items-center shadow-sm">
+                        
+                        <!-- نصوص المنتج والسعر -->
+                        <div class="text-right flex-1 ml-4 py-1">
+                            <h3 class="text-brand-green font-bold text-lg mb-0.5">${item.name}</h3>
+                            <p class="text-gray-700 text-[11px] font-semibold mb-3 leading-tight opacity-90">${item.desc}</p>
+                            
+                            <div class="flex items-center justify-end gap-1.5 text-brand-orange font-black text-lg">
+                                <span>${item.price} <span class="text-[11px] font-bold">ج.م</span></span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <!-- منطقة الصورة / الأيقونة -->
+                        <div class="w-[85px] h-[85px] rounded-[14px] bg-[#fdfaf5] flex items-center justify-center flex-shrink-0 border border-orange-100 p-2">
+                            <img src="${item.iconUrl}" alt="${item.name}" class="w-full h-full object-contain drop-shadow-md">
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+        }
+
+        window.filterProducts = function(categoryId) {
+            renderCategories(categoryId);
+            renderProducts(categoryId);
+        }
+
+        // تشغيل القسم الافتراضي (عصائر طازجة) عند فتح الموقع
+        window.onload = () => {
+            filterProducts('fresh');
+        };
+    </script>
+</body>
+</html>
