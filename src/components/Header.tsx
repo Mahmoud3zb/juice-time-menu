@@ -1,12 +1,16 @@
-export function Header() {
+interface HeaderProps {
+  onOpenWelcome?: () => void;
+}
+
+export function Header({ onOpenWelcome }: HeaderProps) {
   return (
     <header className="w-full flex flex-col items-center bg-white">
-      
+      {/* Announcement Bar */}
       <div className="bg-brand-green text-white text-center py-1.5 text-[13px] font-semibold w-full">
         أهلاً بكم! تم المسح بنجاح | Welcome! Scan Successful
       </div>
 
-     
+      {/* Main Logo Header */}
       <div className="w-full py-4 flex justify-center border-b border-gray-100 relative overflow-hidden bg-white">
         <div
           className="absolute inset-0 opacity-[0.03]"
@@ -15,11 +19,18 @@ export function Header() {
             backgroundSize: '20px 20px',
           }}
         ></div>
-        <img
-          src="/img/logo svg.png"
-          alt="شعار عصير تايم - Juice Time Logo"
-          className="h-24 w-auto object-contain relative z-10 drop-shadow-sm"
-        />
+        <button
+          type="button"
+          onClick={onOpenWelcome}
+          title="العودة لشاشة الترحيب"
+          className="relative z-10 transition-transform active:scale-95 focus:outline-none"
+        >
+          <img
+            src="/img/logo svg.png"
+            alt="شعار عصير تايم - Juice Time Logo"
+            className="h-24 w-auto object-contain drop-shadow-sm"
+          />
+        </button>
       </div>
     </header>
   );
