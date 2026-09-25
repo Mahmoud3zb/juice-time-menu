@@ -15,7 +15,7 @@ export function WelcomeScreen({ onExploreMenu }: WelcomeScreenProps) {
         {/* Header Branding */}
         <div className="flex flex-col items-center gap-3">
           <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 p-2.5 shadow-2xl backdrop-blur-md flex items-center justify-center">
-            <img src="/img/logo svg.png" alt="Juice Time Logo" className="w-full h-full object-contain" />
+            <img src="/logo.png" alt="Juice Time Logo" className="w-full h-full object-contain" />
           </div>
           <div>
             <h1 className="text-3xl font-black tracking-tight text-white">

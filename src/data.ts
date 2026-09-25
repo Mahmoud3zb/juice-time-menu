@@ -482,7 +482,7 @@ products.forEach((p) => {
   p.name = p.nameAr;
   p.desc = p.description; // Clean natural description without hardcoded price strings
   p.category = p.categoryId;
-  p.iconUrl = p.image || '/img/logo.jpg';
+  p.iconUrl = p.image || '/logo.png';
 
   // Fallback price string for current ProductCard rendering
   if (p.price !== undefined) {

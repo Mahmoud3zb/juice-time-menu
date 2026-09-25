@@ -26,7 +26,7 @@ export function Header({ onOpenWelcome }: HeaderProps) {
           className="relative z-10 transition-transform active:scale-95 focus:outline-none"
         >
           <img
-            src="/img/logo svg.png"
+            src="/logo.png"
             alt="شعار عصير تايم - Juice Time Logo"
             className="h-24 w-auto object-contain drop-shadow-sm"
           />
