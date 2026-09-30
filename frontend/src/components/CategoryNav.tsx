@@ -36,7 +36,7 @@ export function CategoryNav({ categories, activeCategory, onCategoryChange }: Ca
                   }`}
                 >
                   <img
-                    src={cat.icon || cat.img || '/img/logo.jpg'}
+                    src={cat.icon || cat.img || '/logo.png'}
                     alt={cat.nameAr}
                     className="w-full h-full object-cover rounded-lg"
                   />
