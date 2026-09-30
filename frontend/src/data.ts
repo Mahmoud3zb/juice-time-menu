@@ -259,7 +259,7 @@ export const products: Product[] = [
   { id: 'imp-mix-3', categoryId: 'imported-fruits', nameAr: 'ميكس 3 أصناف', nameEn: '3 Fruits Mix', description: 'مزيج رائع من 3 أصناف فواكه مستوردة فاخرة', sizes: [{ name: 'كباية', price: 100 }, { name: 'لتر', price: 200 }] },
 
   // 3. ميكسات أفوكادو (Avocado Mixes)
-  { id: 'avo-plain', categoryId: 'avocado-mixes', nameAr: 'أفوكادو سادة', description: 'مزيج أفوكادو طبيعي كريمي غني بالطاقة', sizes: [{ name: 'كباية', price: 100 }, { name: 'لتر', price: 190 }], image: '/img/2.jpg' },
+  { id: 'avo-plain', categoryId: 'avocado-mixes', nameAr: 'أفوكادو سادة', description: 'مزيج أفوكادو طبيعي كريمي غني بالطاقة', sizes: [{ name: 'كباية', price: 100 }, { name: 'لتر', price: 190 }] },
   { id: 'avo-nuts', categoryId: 'avocado-mixes', nameAr: 'أفوكادو مكسرات', description: 'أفوكادو كريمي مزين بأجود المكسرات المحمصة', sizes: [{ name: 'كباية', price: 110 }, { name: 'لتر', price: 220 }] },
   { id: 'avo-cream', categoryId: 'avocado-mixes', nameAr: 'أفوكادو قشطة', description: 'أفوكادو طبيعي كريمي مع القشطة البلدي الغنية', sizes: [{ name: 'كباية', price: 100 }, { name: 'لتر', price: 200 }] },
   { id: 'avo-dates-nuts', categoryId: 'avocado-mixes', nameAr: 'أفوكادو مكسرات بلح', description: 'مزيج الأفوكادو اللذيذ مع التمر والمكسرات الفاخرة', sizes: [{ name: 'كباية', price: 120 }, { name: 'لتر', price: 240 }] },
@@ -267,7 +267,7 @@ export const products: Product[] = [
   { id: 'avo-cream-nuts', categoryId: 'avocado-mixes', nameAr: 'قشطة مكسرات', description: 'أفوكادو فاخر مع القشطة والمكسرات', price: 120 },
 
   // 4. ميكسات كبل (Couple Mixes) - Two Sizes: Cup / 1 Liter
-  { id: 'cpl-mango-avocado', categoryId: 'couple-mixes', nameAr: 'مانجو وأفوكادو', description: 'مزيج المانجو الاستوائية مع الأفوكادو الكريمي', sizes: [{ name: 'كباية', price: 95 }, { name: 'لتر', price: 170 }], image: '/img/4.jpg' },
+  { id: 'cpl-mango-avocado', categoryId: 'couple-mixes', nameAr: 'مانجو وأفوكادو', description: 'مزيج المانجو الاستوائية مع الأفوكادو الكريمي', sizes: [{ name: 'كباية', price: 95 }, { name: 'لتر', price: 170 }] },
   { id: 'cpl-mango-strawberry', categoryId: 'couple-mixes', nameAr: 'مانجو وفراولة', description: 'مزيج المانجو الفريش مع الفراولة الطبيعية', sizes: [{ name: 'كباية', price: 50 }, { name: 'لتر', price: 100 }] },
   { id: 'cpl-mango-guava', categoryId: 'couple-mixes', nameAr: 'مانجو وجوافة', description: 'مزيج المانجو الطبيعية مع الجوافة الفريش', sizes: [{ name: 'كباية', price: 50 }, { name: 'لتر', price: 100 }] },
   { id: 'cpl-kiwi-strawberry', categoryId: 'couple-mixes', nameAr: 'كيوي وفراولة', description: 'مزيج الكيوي المنعش مع الفراولة الطبيعية', sizes: [{ name: 'كباية', price: 60 }, { name: 'لتر', price: 120 }] },
