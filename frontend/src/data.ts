@@ -138,17 +138,17 @@ export const categories: Category[] = [
     id: 'juice-time-yogurt',
     nameAr: 'زبادي عصير تايم',
     nameEn: 'Juice Time Yogurt',
-    background: '/img/1.jpg',
-    icon: '/img/1.jpg',
-    img: '/img/1.jpg',
+    background: '/img/9.jpg',
+    icon: '/img/9.jpg',
+    img: '/img/9.jpg',
   },
   {
     id: 'soft-drinks',
     nameAr: 'موخيتو / المشروبات',
     nameEn: 'Mojitos & Sodas',
-    background: '/img/back2.jpg',
-    icon: '/img/back2.jpg',
-    img: '/img/back2.jpg',
+    background: '/img/11.jpg',
+    icon: '/img/11.jpg',
+    img: '/img/11.jpg',
   },
   {
     id: 'smoothies',
@@ -310,7 +310,7 @@ export const products: Product[] = [
   { id: 'fs-mango-tree', categoryId: 'fruit-salad', nameAr: 'شجرة مانجو', description: 'شجرة المانجو الخاصة والمميزة', price: 90 },
 
   // 6. ميلك شيك (Milk Shake) - Single Price
-  { id: 'ms-fruits', categoryId: 'milkshake', nameAr: 'ميلك تشيك فواكه', description: 'مانجو - كيوي - موز - فراولة', price: 75, image: '/img/6.jpg' },
+  { id: 'ms-fruits', categoryId: 'milkshake', nameAr: 'ميلك تشيك فواكه', description: 'مانجو - كيوي - موز - فراولة', price: 75 },
   { id: 'ms-oreo', categoryId: 'milkshake', nameAr: 'ميلك تشيك أوريو', description: 'ميلك تشيك كريمي غني بقطع بسكويت أوريو', price: 75 },
   { id: 'ms-vanilla', categoryId: 'milkshake', nameAr: 'ميلك تشيك فانيليا', description: 'ميلك تشيك فانيليا كلاسيكي غني ولذيذ', price: 75 },
   { id: 'ms-kitkat', categoryId: 'milkshake', nameAr: 'ميلك تشيك كيت كات', description: 'ميلك تشيك مع قطع شوكولاتة كيت كات المقرمشة', price: 75 },
@@ -332,7 +332,7 @@ export const products: Product[] = [
   { id: 'ms-galaxy', categoryId: 'milkshake', nameAr: 'ميلك تشيك جلاكسي', description: 'ميلك تشيك ناعم بشوكولاتة جلاكسي الفاخرة', price: 75 },
 
   // 7. بروتين كوكتيل (Protein Cocktail) - Single Price
-  { id: 'prot-mass', categoryId: 'protein-cocktail', nameAr: 'ماس', description: 'موز - زبدة فول - حليب - شوفان', price: 70, proteinOptions: defaultProteinOptions, image: '/img/5.jpg' },
+  { id: 'prot-mass', categoryId: 'protein-cocktail', nameAr: 'ماس', description: 'موز - زبدة فول - حليب - شوفان', price: 70, proteinOptions: defaultProteinOptions },
   { id: 'prot-lean-dessert', categoryId: 'protein-cocktail', nameAr: 'لين ديزرت', description: 'فراولة - موز - زبدة فول سوداني - حليب - واي بروتين', price: 75, proteinOptions: defaultProteinOptions },
   { id: 'prot-whats-whey', categoryId: 'protein-cocktail', nameAr: 'واتس واي', description: 'حليب - موز - توت أحمر - زبدة فول سوداني - تمر - واي بروتين', price: 70, proteinOptions: defaultProteinOptions },
   { id: 'prot-juice-time', categoryId: 'protein-cocktail', nameAr: 'عصير تايم', description: 'حليب - توت أزرق - توت أحمر - موز - أفوكادو - شوفان - واي بروتين', price: 85, proteinOptions: defaultProteinOptions },
@@ -341,7 +341,7 @@ export const products: Product[] = [
   { id: 'prot-vehgra', categoryId: 'protein-cocktail', nameAr: 'فيهجرة', description: 'أفوكادو - حليب - كريمة - عسل أبيض - جرجير - كيوي', price: 120, proteinOptions: defaultProteinOptions },
 
   // 8. عوار قلب (Awar Qalb) - Single Price
-  { id: 'aq-sunshine-day', categoryId: 'awar-qalb', nameAr: 'صن شاين داي', description: 'فراولة - خوخ - زبادي - كريمة لباني', price: 70, image: '/img/3.jpg' },
+  { id: 'aq-sunshine-day', categoryId: 'awar-qalb', nameAr: 'صن شاين داي', description: 'فراولة - خوخ - زبادي - كريمة لباني', price: 70 },
   { id: 'aq-pineapple-kali', categoryId: 'awar-qalb', nameAr: 'أناناس كالي', description: 'أناناس - موز - زبادي - عسل - زبدة فول سوداني', price: 70 },
   { id: 'aq-blueberry', categoryId: 'awar-qalb', nameAr: 'بلو بيري عوار', description: 'أفوكادو - توت أزرق - مانجو - عسل - جوز هند - حليب', price: 80 },
   { id: 'aq-awar-qalb', categoryId: 'awar-qalb', nameAr: 'عوار القلب', description: 'مانجو - آيس كريم - حليب - فراولة', price: 70 },
@@ -357,7 +357,7 @@ export const products: Product[] = [
   { id: 'aq-fusion', categoryId: 'awar-qalb', nameAr: 'فيوجين', description: 'مزيج فيوجين عوار قلب المنعش', price: 70 },
 
   // 9. ميكسات سوفت آيس كريم (Soft Ice Cream Mixes) - Single Price
-  { id: 'sic-small-scoop', categoryId: 'soft-ice-cream', nameAr: 'بولة سوفت صغيرة', description: 'بولة آيس كريم سوفت صغيرة', price: 30, image: '/img/teremassoo.jpg' },
+  { id: 'sic-small-scoop', categoryId: 'soft-ice-cream', nameAr: 'بولة سوفت صغيرة', description: 'بولة آيس كريم سوفت صغيرة', price: 30 },
   { id: 'sic-large-scoop', categoryId: 'soft-ice-cream', nameAr: 'بولة سوفت كبيرة', description: 'بولة آيس كريم سوفت كبيرة', price: 40 },
   { id: 'sic-biscuit-large', categoryId: 'soft-ice-cream', nameAr: 'بسكوته سوفت كبيرة', description: 'بسكوتة آيس كريم مقرمشة كبيرة', price: 45 },
   { id: 'sic-ice-fruit', categoryId: 'soft-ice-cream', nameAr: 'آيس فروت', description: 'آيس كريم - فروت سلاط - مانجو - موز', price: 75 },
@@ -379,7 +379,7 @@ export const products: Product[] = [
   { id: 'sic-lotus-caramel', categoryId: 'soft-ice-cream', nameAr: 'سوفت لوتس كراميل', description: 'آيس كريم فانيليا - صوص مكس - ويتش لوتس', price: 75 },
 
   // 10. فانز كوكتيل (Fans Cocktail) - Single Price
-  { id: 'fc-sunrise', categoryId: 'fans-cocktail', nameAr: 'صن رايز', description: 'برتقال - خوخ - جراندين - كريز', price: 60, image: '/img/1.jpg' },
+  { id: 'fc-sunrise', categoryId: 'fans-cocktail', nameAr: 'صن رايز', description: 'برتقال - خوخ - جراندين - كريز', price: 60 },
   { id: 'fc-florida', categoryId: 'fans-cocktail', nameAr: 'فلوردا', description: 'مانجو - جوافة - برتقال - جراندين', price: 65 },
   { id: 'fc-pina-colada', categoryId: 'fans-cocktail', nameAr: 'بينا كولادا', description: 'أناناس - جوز هند - حليب - أناناس فريش', price: 70 },
   { id: 'fc-love-flow', categoryId: 'fans-cocktail', nameAr: 'لاف فلو', description: 'فراولة - موز - كريمة - جوز هند - أناناس', price: 70 },
@@ -388,7 +388,7 @@ export const products: Product[] = [
   { id: 'fc-entash', categoryId: 'fans-cocktail', nameAr: 'انتعاش', description: 'فراولة - بطيخ - كيوي', price: 70 },
 
   // 11. زبادي عصير تايم (Juice Time Yogurt) - Two Sizes: Cup / 1 Liter
-  { id: 'yogurt-honey', categoryId: 'juice-time-yogurt', nameAr: 'زبادي عسل', description: 'زبادي فريش مع العسل الطبيعي', sizes: [{ name: 'كباية', price: 60 }, { name: 'لتر', price: 120 }], image: '/img/1.jpg' },
+  { id: 'yogurt-honey', categoryId: 'juice-time-yogurt', nameAr: 'زبادي عسل', description: 'زبادي فريش مع العسل الطبيعي', sizes: [{ name: 'كباية', price: 60 }, { name: 'لتر', price: 120 }] },
   { id: 'yogurt-strawberry', categoryId: 'juice-time-yogurt', nameAr: 'زبادي فراولة', description: 'زبادي فريش مع قطع وعصير الفراولة', sizes: [{ name: 'كباية', price: 70 }, { name: 'لتر', price: 120 }] },
   { id: 'yogurt-mango', categoryId: 'juice-time-yogurt', nameAr: 'زبادي مانجو', description: 'زبادي فريش مع قطع وعصير المانجو', sizes: [{ name: 'كباية', price: 70 }, { name: 'لتر', price: 120 }] },
   { id: 'yogurt-mix-fruit', categoryId: 'juice-time-yogurt', nameAr: 'زبادي مكس فواكه', description: 'زبادي فريش مع قطع الفواكه المشكلة', sizes: [{ name: 'كباية', price: 85 }, { name: 'لتر', price: 140 }] },
@@ -398,7 +398,7 @@ export const products: Product[] = [
   { id: 'yogurt-berry', categoryId: 'juice-time-yogurt', nameAr: 'زبادي توت', description: 'زبادي فريش بنكهة التوت الغنية', sizes: [{ name: 'كباية', price: 70 }, { name: 'لتر', price: 140 }] },
 
   // 12. موخيتو / المشروبات (Soft Drinks / Mojitos) - Single Price
-  { id: 'sd-sunshine', categoryId: 'soft-drinks', nameAr: 'صن شاين', description: 'مشروب صن شاين المنعش بارد جداً', price: 45, image: '/img/back2.jpg' },
+  { id: 'sd-sunshine', categoryId: 'soft-drinks', nameAr: 'صن شاين', description: 'مشروب صن شاين المنعش بارد جداً', price: 45 },
   { id: 'sd-blue-hawaii', categoryId: 'soft-drinks', nameAr: 'بلو هاواي', description: 'سبرايت / أناناس / بلوعروسو', price: 70 },
   { id: 'sd-mojito', categoryId: 'soft-drinks', nameAr: 'موخيتو', description: 'صودا / ليمون / نعناع / موخيتو', price: 55 },
   { id: 'sd-mojito-strawberry', categoryId: 'soft-drinks', nameAr: 'فراولة موخيتو', description: 'صودا ليمون ونعناع مع سيرب الفراولة', price: 60 },

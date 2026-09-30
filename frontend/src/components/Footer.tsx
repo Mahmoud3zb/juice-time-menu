@@ -1,8 +1,8 @@
 const SHOP_PHONE = "01069059005";
 const WHATSAPP_NUMBER = "201069059005";
 const ADDRESS = "قنا - حوض 10 أمام ديوان عام المحافظة";
-const FACEBOOK_URL = "https://facebook.com";
-const INSTAGRAM_URL = "https://instagram.com";
+const FACEBOOK_URL = "https://www.facebook.com/JuicetimeQena";
+const INSTAGRAM_URL = "https://www.instagram.com/juicetime.eg/";
 
 export function Footer() {
   return (
@@ -125,9 +125,9 @@ export function Footer() {
 
       {/* Left Section: Made by AZB + Circular Logo */}
       <div className="flex items-center gap-2 flex-shrink-0">
-        <div className="text-[9px] text-gray-400 font-bold hidden sm:block">
+        {/* <div className="text-[9px] text-gray-400 font-bold hidden sm:block">
           Made by <span className="text-brand-orange font-extrabold">AZB</span>
-        </div>
+        </div> */}
         <img
           src="/logo.png"
           alt="Juice Time"
