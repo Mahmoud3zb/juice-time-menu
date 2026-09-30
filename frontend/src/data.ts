@@ -437,7 +437,7 @@ export const products: Product[] = [
   { id: 'sm-prickly-pear', categoryId: 'smoothies', nameAr: 'اسموزي تين شوكي', description: 'اسموزي التين الشوكي البارد المنعش', price: 50 },
 
   // 14. آيس كوفي (Iced Coffee) - Single Price (Ice Coffee Caramel appears only ONCE)
-  { id: 'ic-coffee', categoryId: 'iced-coffee', nameAr: 'Ice Coffee', description: 'قهوة مثلجة كلاسيكية باردة ومنعشة', price: 65, image: '/img/8.jpg' },
+  { id: 'ic-coffee', categoryId: 'iced-coffee', nameAr: 'Ice Coffee', description: 'قهوة مثلجة كلاسيكية باردة ومنعشة', price: 65 },
   { id: 'ic-latte', categoryId: 'iced-coffee', nameAr: 'Ice Latte', description: 'آيس لاتيه غني بالحليب والاسبريسو البارد', price: 70 },
   { id: 'ic-caramel-frappuccino', categoryId: 'iced-coffee', nameAr: 'Caramel Frappu', description: 'فرابوتشينو مثلج بصوص الكراميل اللذيذ', price: 75 },
   { id: 'ic-mocha-frappuccino', categoryId: 'iced-coffee', nameAr: 'Mocha Frappu', description: 'فرابوتشينو مثلج بالشوكولاتة والاسبريسو', price: 75 },
@@ -456,19 +456,19 @@ export const products: Product[] = [
   { id: 'ic-frappe-pistachio', categoryId: 'iced-coffee', nameAr: 'Frappe Pistachio', description: 'فرابيه بارد بنكهة البستاشيو الفاخرة', price: 90 },
 
   // 15. وافل (Waffles) - Single Price
-  { id: 'wf-nutella', categoryId: 'waffles', nameAr: 'وافل نوتيلا', description: 'وافل مقرمش طازج مغطى بشوكولاتة النوتيلا الغنية', price: 60, image: '/img/b1.jpg' },
+  { id: 'wf-nutella', categoryId: 'waffles', nameAr: 'وافل نوتيلا', description: 'وافل مقرمش طازج مغطى بشوكولاتة النوتيلا الغنية', price: 60 },
   { id: 'wf-fruits', categoryId: 'waffles', nameAr: 'وافل فاكهة', description: 'وافل مقرمش مغطى بقطع الفواكه الطازجة والعسل', price: 75 },
   { id: 'wf-juice-time', categoryId: 'waffles', nameAr: 'وافل عصير تايم', description: 'وافل عصير تايم الخاص المشكل بالشوكولاتة والفواكه', price: 75 },
   { id: 'wf-galaxy', categoryId: 'waffles', nameAr: 'وافل جلاكسي', description: 'وافل مقرمش غارق بشوكولاتة جلاكسي الناعمة', price: 75 },
   { id: 'wf-kitkat', categoryId: 'waffles', nameAr: 'وافل كيت كات', description: 'وافل مقرمش مع قطع شوكولاتة كيت كات', price: 75 },
 
   // 16. ميني بان كيك (Mini Pancakes) - Single Price
-  { id: 'mp-small', categoryId: 'mini-pancakes', nameAr: 'بان كيك صغير', description: 'قطع ميني بان كيك هشة ولذيذة مع الصوص', price: 50, image: '/img/b1.jpg' },
+  { id: 'mp-small', categoryId: 'mini-pancakes', nameAr: 'بان كيك صغير', description: 'قطع ميني بان كيك هشة ولذيذة مع الصوص', price: 50 },
   { id: 'mp-large', categoryId: 'mini-pancakes', nameAr: 'بان كيك كبير', description: 'وجبة ميني بان كيك كبيرة مشكلة بالصوصات', price: 60 },
   { id: 'mp-mix-cake', categoryId: 'mini-pancakes', nameAr: 'ميكس ميني كيك', description: 'قطع مانجو + نوتيلا', price: 75 },
 
   // 17. حلواني (Sweets & Cakes) - Single Price
-  { id: 'sw-cheesecake', categoryId: 'sweets', nameAr: 'تشيز كيك', description: 'تشيز كيك كريمي فاخر مع صوص الفراولة أو التوت', price: 70, image: '/img/ام على.jpg' },
+  { id: 'sw-cheesecake', categoryId: 'sweets', nameAr: 'تشيز كيك', description: 'تشيز كيك كريمي فاخر مع صوص الفراولة أو التوت', price: 70 },
   { id: 'sw-despacito', categoryId: 'sweets', nameAr: 'ديسباسيتو', description: 'كيك ديسباسيتو البرازيلي الشوكولاتة الغني', price: 50 },
   { id: 'sw-tajn-lotus', categoryId: 'sweets', nameAr: 'طاجن لوتس', description: 'طاجن لوتس غني بزبدة وبسكويت اللوتس المقرمش', price: 60 },
   { id: 'sw-tajn-nutella', categoryId: 'sweets', nameAr: 'طاجن نوتيلا', description: 'طاجن الكيك الدافئ الغارق بشوكولاتة النوتيلا', price: 60 },
@@ -492,14 +492,13 @@ export const products: Product[] = [
   { id: 'sw-qashtouta-strawberry', categoryId: 'sweets', nameAr: 'قشطوطة فراولة', description: 'قشطوطة طازجة غنية بقطع الفراولة', price: 85 },
 
   // 18. أرز بلبن (Rice Pudding) - Single Price
-  { id: 'rp-plain', categoryId: 'rice-pudding', nameAr: 'أرز لبن سادة', description: 'أرز باللبن البلدي الكريمي السادة طازج', price: 35, image: '/img/ام على.jpg' },
+  { id: 'rp-plain', categoryId: 'rice-pudding', nameAr: 'أرز لبن سادة', description: 'أرز باللبن البلدي الكريمي السادة طازج', price: 35 },
   { id: 'rp-mango', categoryId: 'rice-pudding', nameAr: 'أرز لبن مانجو', description: 'أرز باللبن الكريمي مغطى بقطع المانجو الفريش', price: 55 },
   { id: 'rp-nuts-honey', categoryId: 'rice-pudding', nameAr: 'أرز لبن مكسرات وعسل', description: 'أرز باللبن مزين بأجود المكسرات والعسل', price: 55 },
   { id: 'rp-icecream', categoryId: 'rice-pudding', nameAr: 'أرز لبن آيس كريم', description: 'أرز باللبن الكريمي مع بولة آيس كريم فانيليا', price: 55 },
   { id: 'rp-lotus', categoryId: 'rice-pudding', nameAr: 'أرز بلبن لوتس', description: 'أرز باللبن مغطى بزبدة وبسكويت اللوتس', price: 55 },
 
   // 19. مشروبات ساخنة (Hot Drinks) - Single Price (Hot Cider & Pumpkine Hot Coffee moved to Coffee)
-  { id: 'hd-water-small', categoryId: 'hot-drinks', nameAr: 'مياه صغيرة', description: 'زجاجة مياه معدنية صغيرة نقية', price: 10, image: '/img/8.jpg' },
   { id: 'hd-tea', categoryId: 'hot-drinks', nameAr: 'شاي', description: 'شاي أحمر دافئ ممتاز', price: 20 },
   { id: 'hd-tea-milk', categoryId: 'hot-drinks', nameAr: 'شاي بالحليب', description: 'شاي مغلي مضبوط مضاف إليه الحليب البلدي', price: 30 },
   { id: 'hd-herbs', categoryId: 'hot-drinks', nameAr: 'أعشاب', description: 'ينسون - كركديه - قرفة - زنجبيل', price: 20 },
@@ -507,9 +506,10 @@ export const products: Product[] = [
   { id: 'hd-ginger-milk', categoryId: 'hot-drinks', nameAr: 'جنزبيل حليب', description: 'مشروب الزنجبيل الدافئ بالحليب البلدي', price: 40 },
   { id: 'hd-vitamin-c', categoryId: 'hot-drinks', nameAr: 'فيتامين سي عصير تايم', description: 'ينسون - نعناع - ليمون - عسل - زنجبيل', price: 35 },
   { id: 'hd-pineapple-spice', categoryId: 'hot-drinks', nameAr: 'Pinapple Spice', description: 'مشروب الأناناس الدافئ بالتوابل العطرية', price: 50 },
+  { id: 'hd-water-small', categoryId: 'hot-drinks', nameAr: 'مياه صغيرة', description: 'زجاجة مياه معدنية صغيرة نقية', price: 10 },
 
   // 20. الركن الشتوي (Winter Corner) - Single Price
-  { id: 'wc-belila-nuts', categoryId: 'winter-corner', nameAr: 'بليلة لبن مكسرات', description: 'بليلة دافئة بالحليب والمكسرات الفاخرة', price: 65, image: '/img/ام على.jpg' },
+  { id: 'wc-belila-nuts', categoryId: 'winter-corner', nameAr: 'بليلة لبن مكسرات', description: 'بليلة دافئة بالحليب والمكسرات الفاخرة', price: 65 },
   { id: 'wc-hummus-large', categoryId: 'winter-corner', nameAr: 'حمص الشام كبير', description: 'حمص الشام الساخن الحار حجم كبير', price: 35 },
   { id: 'wc-hummus-small', categoryId: 'winter-corner', nameAr: 'حمص الشام صغير', description: 'حمص الشام الساخن الحار حجم صغير', price: 25 },
   { id: 'wc-belila-plain', categoryId: 'winter-corner', nameAr: 'بليلة لبن سادة', description: 'بليلة دافئة بالحليب البلدي الساخن', price: 50 },
@@ -520,7 +520,7 @@ export const products: Product[] = [
   { id: 'wc-sahlab-juicetime', categoryId: 'winter-corner', nameAr: 'سحلب عصير تايم', description: 'سحلب عصير تايم المشكل بالمكسرات والفواكه', price: 65 },
 
   // 21. القهوة (Coffee) - Single & Dual Sizes (Hot Cider & Pumpkine Hot Coffee included here)
-  { id: 'cff-plain-light', categoryId: 'coffee', nameAr: 'سادة فاتح', description: 'قهوة تركي سادة فاتح', sizes: [{ name: 'سنجل', price: 35 }, { name: 'دبل', price: 45 }], image: '/img/8.jpg' },
+  { id: 'cff-plain-light', categoryId: 'coffee', nameAr: 'سادة فاتح', description: 'قهوة تركي سادة فاتح', sizes: [{ name: 'سنجل', price: 35 }, { name: 'دبل', price: 45 }] },
   { id: 'cff-plain-dark', categoryId: 'coffee', nameAr: 'سادة غامق', description: 'قهوة تركي سادة غامق', sizes: [{ name: 'سنجل', price: 35 }, { name: 'دبل', price: 45 }] },
   { id: 'cff-spiced-light', categoryId: 'coffee', nameAr: 'محوج فاتح', description: 'قهوة تركي محوج فاتح', sizes: [{ name: 'سنجل', price: 35 }, { name: 'دبل', price: 45 }] },
   { id: 'cff-spiced-dark', categoryId: 'coffee', nameAr: 'محوج غامق', description: 'قهوة تركي محوج غامق', sizes: [{ name: 'سنجل', price: 35 }, { name: 'دبل', price: 45 }] },
