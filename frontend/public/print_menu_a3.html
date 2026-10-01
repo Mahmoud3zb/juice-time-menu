@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>عصير تايم - منيو الورق الرسمي A3 (Print Ready)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+      padding: 20px;
+    }
+
+    /* A3 Sheet Page Styling (420mm x 297mm Landscape) */
+    .a3-page {
+      width: 420mm;
+      height: 297mm;
+      background-color: #ffffff;
+      padding: 7mm 8mm;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      border: 1px solid #cbd5e1;
+    }
+
+    /* PAGE 1 TOP SHEET BACKGROUND (FRESH TROPICAL JUICE THEME) */
+    .page-top::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url('/a3_top_sheet_bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 1;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* PAGE 2 BOTTOM SHEET BACKGROUND (MATCHES PAGE 1 TROPICAL THEME WITH OPACITY 1) */
+    .page-bottom::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url('/a3_top_sheet_bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 1;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
+    }
+
+    /* TOP HEADER BAR */
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      padding-bottom: 4px;
+      border-bottom: 2px solid rgba(0, 154, 116, 0.15);
+    }
+
+    /* TOP RIGHT: 3D MASCOT & CONTACT DETAILS CARD */
+    .contact-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(240, 253, 244, 0.92) 100%);
+      border: 1.5px solid #009a74;
+      border-radius: 12px;
+      padding: 4px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 2px 8px rgba(0, 154, 116, 0.12);
+    }
+
+    .mascot-top-img {
+      height: 62px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+    }
+
+    .contact-info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: 0.8px;
+      word-spacing: 1.8px;
+    }
+
+    .shop-name-tag {
+      font-size: 14px;
+      font-weight: 900;
+      color: #009a74;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.8px;
+    }
+
+    .shop-name-tag span {
+      font-size: 10px;
+      color: #f37021;
+      font-weight: 800;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .contact-icon {
+      color: #009a74;
+      font-size: 12.5px;
+    }
+
+    /* TOP LEFT: LOGO & SLOGAN PILL */
+    .brand-title-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      height: 54px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+
+    .brand-slogan-pill {
+      background: linear-gradient(135deg, #009a74 0%, #007054 100%);
+      color: #ffffff;
+      padding: 4px 20px;
+      border-radius: 50px;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      word-spacing: 2px;
+      box-shadow: 0 4px 10px rgba(0, 154, 116, 0.2);
+    }
+
+    /* GRID COLUMNS LAYOUT - RTL ORDER */
+    .menu-grid-top {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      flex: 1;
+    }
+
+    .menu-grid-bottom {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      flex: 1;
+    }
+
+    /* SECTION CARD BOX - SLIGHT TRANSPARENCY FOR FRUIT BACKGROUND SHINE THROUGH */
+    .section-box {
+      background: rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: 10px;
+      padding: 4px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    /* SECTION HEADER PILLS */
+    .sec-header {
+      color: #ffffff;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 14.5px;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      letter-spacing: 0.9px;
+      word-spacing: 2px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .sec-header.green {
+      background: linear-gradient(135deg, #009a74 0%, #007d5e 100%);
+    }
+
+    .sec-header.orange {
+      background: linear-gradient(135deg, #f37021 0%, #d95a0e 100%);
+    }
+
+    .sec-header.red {
+      background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+    }
+
+    /* DUAL SIZE COLUMNS HEADER - ACCURATE ALIGNMENT */
+    .dual-col-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2px 4px;
+      background: rgba(0, 154, 116, 0.14);
+      border-radius: 4px;
+      margin-bottom: 3px;
+    }
+
+    .dual-col-header .header-spacer {
+      flex: 1;
+    }
+
+    .dual-col-header .size-labels {
+      display: flex;
+      align-items: center;
+      width: 84px;
+      justify-content: space-between;
+    }
+
+    .dual-col-header .size-lbl {
+      width: 40px;
+      text-align: center;
+      font-size: 11.5px;
+      font-weight: 900;
+      color: #007054;
+      letter-spacing: 0.8px;
+    }
+
+    /* PRODUCT ITEM ROW - PERFECT RTL & PRICE ALIGNMENT */
+    .item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 2.5px 3px;
+      font-size: 12.5px;
+      font-weight: 800;
+      border-bottom: 1px dashed #cbd5e1;
+      line-height: 1.35;
+    }
+
+    .item-row:last-child {
+      border-bottom: none;
+    }
+
+    .item-name {
+      color: #0f172a;
+      flex: 1;
+      text-align: right;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-left: 4px;
+      font-size: 12.5px;
+      font-weight: 800;
+      letter-spacing: 0.9px;
+      word-spacing: 2.2px;
+    }
+
+    /* DUAL PRICE BOX - EXACTLY MATCHES DUAL SIZE LABELS */
+    .dual-price-box {
+      display: flex;
+      align-items: center;
+      width: 84px;
+      justify-content: space-between;
+    }
+
+    .dual-price-box .p-cup {
+      width: 40px;
+      text-align: center;
+      font-weight: 900;
+      color: #007054;
+      font-size: 12.5px;
+      letter-spacing: 0.8px;
+    }
+
+    .dual-price-box .p-liter {
+      width: 40px;
+      text-align: center;
+      font-weight: 900;
+      color: #0f172a;
+      font-size: 12.5px;
+      letter-spacing: 0.8px;
+    }
+
+    .price-single {
+      font-weight: 900;
+      color: #0f172a;
+      font-size: 13px;
+      min-width: 28px;
+      text-align: left;
+      letter-spacing: 0.8px;
+    }
+
+    /* FOOTER BAR */
+    .footer-bar {
+      background: linear-gradient(135deg, #009a74 0%, #00634a 100%);
+      color: #ffffff;
+      text-align: center;
+      padding: 5px;
+      font-size: 13.5px;
+      font-weight: 900;
+      border-radius: 6px;
+      margin-top: 4px;
+      letter-spacing: 0.9px;
+      word-spacing: 2px;
+    }
+
+    @media print {
+      body {
+        background: none;
+        padding: 0;
+        gap: 0;
+      }
+      .a3-page {
+        box-shadow: none;
+        border: none;
+        margin: 0;
+        width: 420mm;
+        height: 297mm;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== PAGE 1: TOP SHEET (RTL ORDER: COL 1 FAR RIGHT TO COL 7 FAR LEFT) ==================== -->
+  <div class="a3-page page-top">
+    <div class="content-wrapper">
+      
+      <!-- HEADER BAR -->
+      <div class="header-bar">
+        <!-- TOP RIGHT: 3D MASCOT & SHOP DETAILS (RTL FIRST CHILD) -->
+        <div class="contact-card">
+          <img src="/3D-Model.png" alt="Juice Time Mascot" class="mascot-top-img">
+          <div class="contact-info-list">
+            <div class="shop-name-tag">عصير تايم <span>JUICE TIME</span></div>
+            <div class="contact-item">
+              <span class="contact-icon">📍</span>
+              <span>قنا - حوض 10 أمام ديوان المحافظة</span>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">📞</span>
+              <span dir="ltr">01069059005</span>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">🌐</span>
+              <span>Juice Time Qena - عصير تايم قنا</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TOP LEFT: LOGO & SLOGAN PILL -->
+        <div class="brand-title-box">
+          <div class="brand-slogan-pill">طعم الطبيعة .. في كل وقت 🌿</div>
+          <img src="/logo.png" alt="Juice Time" class="brand-logo">
+        </div>
+      </div>
+
+      <!-- MAIN TOP GRID (7 Columns Layout - RTL ORDER) -->
+      <div class="menu-grid-top">
+
+        <!-- COL 1 (FAR RIGHT): عصائر فريش + فواكه مستوردة + ميكسات أفوكادو -->
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div class="section-box">
+            <div class="sec-header green">عصائر فريش 🍊</div>
+            <div class="dual-col-header">
+              <div class="header-spacer"></div>
+              <div class="size-labels">
+                <span class="size-lbl">كوباية</span>
+                <span class="size-lbl">لتر</span>
+              </div>
+            </div>
+            <div class="item-row"><span class="item-name">مانجو</span><div class="dual-price-box"><span class="p-cup">50</span><span class="p-liter">100</span></div></div>
+            <div class="item-row"><span class="item-name">فراولة</span><div class="dual-price-box"><span class="p-cup">50</span><span class="p-liter">100</span></div></div>
+            <div class="item-row"><span class="item-name">جوافة</span><div class="dual-price-box"><span class="p-cup">50</span><span class="p-liter">100</span></div></div>
+            <div class="item-row"><span class="item-name">موز حليب</span><div class="dual-price-box"><span class="p-cup">60</span><span class="p-liter">120</span></div></div>
+            <div class="item-row"><span class="item-name">كانتلوب</span><div class="dual-price-box"><span class="p-cup">50</span><span class="p-liter">100</span></div></div>
+            <div class="item-row"><span class="item-name">عنب</span><div class="dual-price-box"><span class="p-cup">50</span><span class="p-liter">100</span></div></div>
+            <div class="item-row"><span class="item-name">بطيخ</span><div class="dual-price-box"><span class="p-cup">50</span><span class="p-liter">100</span></div></div>
+            <div class="item-row"><span class="item-name">خوخ</span><div class="dual-price-box"><span class="p-cup">50</span><span class="p-liter">100</span></div></div>
+            <div class="item-row"><span class="item-name">تين شوكي</span><div class="dual-price-box"><span class="p-cup">50</span><span class="p-liter">100</span></div></div>
+            <div class="item-row"><span class="item-name">رمان</span><div class="dual-price-box"><span class="p-cup">50</span><span class="p-liter">100</span></div></div>
+            <div class="item-row"><span class="item-name">برتقال متصفى</span><div class="dual-price-box"><span class="p-cup">60</span><span class="p-liter">120</span></div></div>
+            <div class="item-row"><span class="item-name">ليمون</span><div class="dual-price-box"><span class="p-cup">40</span><span class="p-liter">80</span></div></div>
+            <div class="item-row"><span class="item-name">لمون نعناع</span><div class="dual-price-box"><span class="p-cup">40</span><span class="p-liter">80</span></div></div>
+            <div class="item-row"><span class="item-name">جزر</span><div class="dual-price-box"><span class="p-cup">50</span><span class="p-liter">100</span></div></div>
+          </div>
+
+          <div class="section-box">
+            <div class="sec-header green">فواكه مستوردة 🍍</div>
+            <div class="dual-col-header">
+              <div class="header-spacer"></div>
+              <div class="size-labels">
+                <span class="size-lbl">كوباية</span>
+                <span class="size-lbl">لتر</span>
+              </div>
+            </div>
+            <div class="item-row"><span class="item-name">أناناس</span><div class="dual-price-box"><span class="p-cup">70</span><span class="p-liter">140</span></div></div>
+            <div class="item-row"><span class="item-name">كيوي</span><div class="dual-price-box"><span class="p-cup">65</span><span class="p-liter">130</span></div></div>
+            <div class="item-row"><span class="item-name">كرز لبناني</span><div class="dual-price-box"><span class="p-cup">80</span><span class="p-liter">160</span></div></div>
+            <div class="item-row"><span class="item-name">توت</span><div class="dual-price-box"><span class="p-cup">65</span><span class="p-liter">130</span></div></div>
+            <div class="item-row"><span class="item-name">تفاح</span><div class="dual-price-box"><span class="p-cup">65</span><span class="p-liter">135</span></div></div>
+            <div class="item-row"><span class="item-name">قشطة</span><div class="dual-price-box"><span class="p-cup">90</span><span class="p-liter">180</span></div></div>
+            <div class="item-row"><span class="item-name">برقوق</span><div class="dual-price-box"><span class="p-cup">65</span><span class="p-liter">130</span></div></div>
+            <div class="item-row"><span class="item-name">باشون فروت</span><div class="dual-price-box"><span class="p-cup">100</span><span class="p-liter">200</span></div></div>
+            <div class="item-row"><span class="item-name">ميكس 3 أصناف</span><div class="dual-price-box"><span class="p-cup">100</span><span class="p-liter">200</span></div></div>
+          </div>
+
+          <div class="section-box" style="flex: 1;">
+            <div class="sec-header orange">ميكسات أفوكادو 🥑</div>
+            <div class="dual-col-header">
+              <div class="header-spacer"></div>
+              <div class="size-labels">
+                <span class="size-lbl">كوباية</span>
+                <span class="size-lbl">لتر</span>
+              </div>
+            </div>
+            <div class="item-row"><span class="item-name">أفوكادو سادة</span><div class="dual-price-box"><span class="p-cup">100</span><span class="p-liter">190</span></div></div>
+            <div class="item-row"><span class="item-name">أفوكادو مكسرات</span><div class="dual-price-box"><span class="p-cup">110</span><span class="p-liter">220</span></div></div>
+            <div class="item-row"><span class="item-name">أفوكادو قشطة</span><div class="dual-price-box"><span class="p-cup">100</span><span class="p-liter">200</span></div></div>
+            <div class="item-row"><span class="item-name">أفوكادو مكسرات بلح</span><div class="dual-price-box"><span class="p-cup">120</span><span class="p-liter">240</span></div></div>
+            <div class="item-row"><span class="item-name">تروبيكال</span><div class="dual-price-box"><span class="p-cup">150</span></div></div>
+            <div class="item-row"><span class="item-name">أفوكادو قشطة مكسرات</span><div class="dual-price-box"><span class="p-cup">120</span></div></div>
+            <!-- <div class="item-row"><span class="item-name">برتقال وأناناس</span><div class="dual-price-box"><span class="p-cup">75</span><span class="p-liter">150</span></div></div>
+            <div class="item-row"><span class="item-name">خوخ ومانجو</span><div class="dual-price-box"><span class="p-cup">65</span><span class="p-liter">120</span></div></div>
+            <div class="item-row"><span class="item-name">مانجو بطيخ</span><div class="dual-price-box"><span class="p-cup">60</span><span class="p-liter">120</span></div></div>
+            <div class="item-row"><span class="item-name">أفوكادو موز</span><div class="dual-price-box"><span class="p-cup">95</span><span class="p-liter">190</span></div></div> -->
+          </div>
+        </div>
+
+        <!-- COL 2: ميكسات كبل -->
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div class="section-box" style="flex: 1;">
+            <div class="sec-header green">ميكسات كبل 🍹</div>
+            <div class="dual-col-header">
+              <div class="header-spacer"></div>
+              <div class="size-labels">
+                <span class="size-lbl">كوباية</span>
+                <span class="size-lbl">لتر</span>
+              </div>
+            </div>
+            <div class="item-row"><span class="item-name">مانجو وأفوكادو</span><div class="dual-price-box"><span class="p-cup">95</span><span class="p-liter">170</span></div></div>
+            <div class="item-row"><span class="item-name">مانجو وفراولة</span><div class="dual-price-box"><span class="p-cup">50</span><span class="p-liter">100</span></div></div>
+            <div class="item-row"><span class="item-name">مانجو وجوافة</span><div class="dual-price-box"><span class="p-cup">50</span><span class="p-liter">100</span></div></div>
+            <div class="item-row"><span class="item-name">كيوي وفراولة</span><div class="dual-price-box"><span class="p-cup">60</span><span class="p-liter">120</span></div></div>
+            <div class="item-row"><span class="item-name">فراولة وتوت</span><div class="dual-price-box"><span class="p-cup">60</span><span class="p-liter">110</span></div></div>
+            <div class="item-row"><span class="item-name">رمان وتوت</span><div class="dual-price-box"><span class="p-cup">60</span><span class="p-liter">120</span></div></div>
+            <div class="item-row"><span class="item-name">برتقال وأناناس</span><div class="dual-price-box"><span class="p-cup">75</span><span class="p-liter">150</span></div></div>
+            <div class="item-row"><span class="item-name">خوخ ومانجو</span><div class="dual-price-box"><span class="p-cup">65</span><span class="p-liter">120</span></div></div>
+            <div class="item-row"><span class="item-name">مانجو بطيخ</span><div class="dual-price-box"><span class="p-cup">60</span><span class="p-liter">120</span></div></div>
+            <div class="item-row"><span class="item-name">أفوكادو موز</span><div class="dual-price-box"><span class="p-cup">95</span><span class="p-liter">190</span></div></div>
+            <div class="item-row"><span class="item-name">كيوي خوخ</span><div class="dual-price-box"><span class="p-cup">60</span><span class="p-liter">120</span></div></div>
+            <div class="item-row"><span class="item-name">كيوي أناناس</span><div class="dual-price-box"><span class="p-cup">80</span><span class="p-liter">160</span></div></div>
+            <div class="item-row"><span class="item-name">فراولة برقوق</span><div class="dual-price-box"><span class="p-cup">60</span><span class="p-liter">120</span></div></div>
+            <div class="item-row"><span class="item-name">أفوكادو كيوي</span><div class="dual-price-box"><span class="p-cup">95</span><span class="p-liter">190</span></div></div>
+            <div class="item-row"><span class="item-name">أفوكادو بلح</span><div class="dual-price-box"><span class="p-cup">100</span><span class="p-liter">170</span></div></div>
+            <div class="item-row"><span class="item-name">أفوكادو أناناس</span><div class="dual-price-box"><span class="p-cup">100</span><span class="p-liter">200</span></div></div>
+            <div class="item-row"><span class="item-name">كيوي جوافة</span><div class="dual-price-box"><span class="p-cup">60</span><span class="p-liter">120</span></div></div>
+            <div class="item-row"><span class="item-name">موز كانتالوب</span><div class="dual-price-box"><span class="p-cup">60</span><span class="p-liter">100</span></div></div>
+            <div class="item-row"><span class="item-name">بطيخ كانتالوب</span><div class="dual-price-box"><span class="p-cup">60</span><span class="p-liter">100</span></div></div>
+            <div class="item-row"><span class="item-name">برتقال جزر</span><div class="dual-price-box"><span class="p-cup">60</span><span class="p-liter">100</span></div></div>
+            <div class="item-row"><span class="item-name">برتقال كيوى</span><div class="dual-price-box"><span class="p-cup">70</span><span class="p-liter">140</span></div></div>
+            <div class="item-row"><span class="item-name">مانجا أناناس</span><div class="dual-price-box"><span class="p-cup">75</span><span class="p-liter">150</span></div></div>
+            <div class="item-row"><span class="item-name">جوافة فراولة</span><div class="dual-price-box"><span class="p-cup">50</span><span class="p-liter">100</span></div></div>
+            <div class="item-row"><span class="item-name">كيوى ليمون نعناع</span><div class="dual-price-box"><span class="p-cup">70</span><span class="p-liter">140</span></div></div>
+            <div class="item-row"><span class="item-name">فراولة موز</span><div class="dual-price-box"><span class="p-cup">50</span><span class="p-liter">100</span></div></div>
+            <div class="item-row"><span class="item-name">فراولة موز</span><div class="dual-price-box"><span class="p-cup">50</span><span class="p-liter">100</span></div></div>
+            <div class="item-row"><span class="item-name">مشمش خوخ</span><div class="dual-price-box"><span class="p-cup">65</span><span class="p-liter">130</span></div></div>
+            <div class="item-row"><span class="item-name">مانجو تين شوكى</span><div class="dual-price-box"><span class="p-cup">65</span><span class="p-liter">130</span></div></div>
+            <div class="item-row"><span class="item-name">بلح حليب مكسرات</span><div class="dual-price-box"><span class="p-cup">85</span><span class="p-liter">170</span></div></div>
+            <div class="item-row"><span class="item-name">خوخ حليب </span><div class="dual-price-box"><span class="p-cup">70</span><span class="p-liter">140</span></div></div>
+          </div>
+        </div>
+
+        <!-- COL 3: سلطة فواكه + ميلك شيك -->
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div class="section-box">
+            <div class="sec-header orange">سلطة فواكه 🍧</div>
+            <div class="item-row"><span class="item-name">فروت سلاط مع عصير</span><span class="price-single">50</span></div>
+            <div class="item-row"><span class="item-name">فروت سلاط مع آيس كريم</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">فروت مع مكسرات وقشطة</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">قنبلة</span><span class="price-single">100</span></div>
+            <div class="item-row"><span class="item-name">فروت سلاط آيس كريم مكسرات</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">قطع بطيخ</span><span class="price-single">45</span></div>
+            <div class="item-row"><span class="item-name">حب رمان</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">قطع مانجو</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">قطع فراولة</span><span class="price-single">50</span></div>
+            <div class="item-row"><span class="item-name">شجرة مانجو</span><span class="price-single">90</span></div>
+          </div>
+
+          <div class="section-box" style="flex: 1;">
+            <div class="sec-header green">ميلك شيك 🥤</div>
+            <div class="item-row"><span class="item-name">ميلك تشيك فواكه</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك أوريو</span><span class="price-single">75</span></div>
+            <!-- <div class="item-row"><span class="item-name">ميلك تشيك جوافة</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك وفراولة</span><span class="price-single">75</span> -->
+            <div class="item-row"><span class="item-name">ميلك تشيك نوتيلا</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك فانيليا</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك كراميل</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك جلاكسى</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك كيت كات</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك لوتس</span><span class="price-single">80</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك كاجو</span><span class="price-single">80</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك تويكس مادكس</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك سنيكرز</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك نوتي كيندر</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك ريد بيري</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك بلو بيري</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك سيرلاك</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك زبادى توت</span><span class="price-single">80</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك ميجا</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك جوجو</span><span class="price-single">85</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك بيستاشيو</span><span class="price-single">85</span></div>
+            <div class="item-row"><span class="item-name">ميلك تشيك كريز</span><span class="price-single">90</span></div>
+          </div>
+        </div>
+
+        <!-- COL 4: بروتين كوكتيل + عوار قلب -->
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div class="section-box">
+            <div class="sec-header orange">بروتين كوكتيل 🏋️</div>
+            <div class="item-row"><span class="item-name">ماس</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">لين ديزرت</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">واتس واي</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">عصير تايم</span><span class="price-single">85</span></div>
+            <div class="item-row"><span class="item-name">نايتروكور</span><span class="price-single">95</span></div>
+            <div class="item-row"><span class="item-name">كمكون</span><span class="price-single">95</span></div>
+            <div class="item-row"><span class="item-name">فيهجرة</span><span class="price-single">120</span></div>
+          </div>
+
+          <div class="section-box" style="flex: 1;">
+            <div class="sec-header red">عوار قلب ❤️</div>
+            <div class="item-row"><span class="item-name">صن شاين داي</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">أناناس كالي</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">بلو بيري عوار</span><span class="price-single">80</span></div>
+            <div class="item-row"><span class="item-name">عوار القلب</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">سجنتشر</span><span class="price-single">80</span></div>
+            <div class="item-row"><span class="item-name">كريستال</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">براديس</span><span class="price-single">90</span></div>
+            <div class="item-row"><span class="item-name">جاميكا</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">جمباجوس</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">المدمر</span><span class="price-single">120</span></div>
+            <div class="item-row"><span class="item-name">نعنشة</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">شباب</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">آخر كلام</span><span class="price-single">80</span></div>
+            <div class="item-row"><span class="item-name">فيوجين</span><span class="price-single">70</span></div>
+          </div>
+        </div>
+
+        <!-- COL 5 (FAR LEFT): فانز كوكتيل + زبادي عصير تايم -->
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div class="section-box">
+            <div class="sec-header orange">فانز كوكتيل 🍓</div>
+            <div class="item-row"><span class="item-name">صن رايز</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">فلوردا</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">بينا كولادا</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">لاف فلو</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">ماي دريم</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">كوكتيل لايون</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">انتعاش</span><span class="price-single">70</span></div>
+          </div>
+
+          <div class="section-box" style="flex: 1;">
+            <div class="sec-header green">ميكسات سوفت آيس كريم 🍦</div>
+            <div class="item-row"><span class="item-name">بولة سوفت صغيرة</span><span class="price-single">30</span></div>
+            <div class="item-row"><span class="item-name">بولة سوفت كبيرة</span><span class="price-single">40</span></div>
+            <div class="item-row"><span class="item-name">بسكوتة سوفت كبيرة</span><span class="price-single">45</span></div>
+            <div class="item-row"><span class="item-name">آيس فروت</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">منجاوى</span><span class="price-single">90</span></div>
+            <div class="item-row"><span class="item-name">أوريو سوفت</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">كراميل سوفت</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">كاززا</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">شيكر</span><span class="price-single">80</span></div>
+            <div class="item-row"><span class="item-name">لاجو</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">تاكو آيس كريم</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">رول آيس كريم</span><span class="price-single">45</span></div>
+            <div class="item-row"><span class="item-name">غرفني</span><span class="price-single">100</span></div>
+            <div class="item-row"><span class="item-name">ستوب وتش</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">آيس كريم جوجو</span><span class="price-single">40</span></div>
+            <div class="item-row"><span class="item-name">آيس كريم نوتيلا</span><span class="price-single">35</span></div>
+            <div class="item-row"><span class="item-name">آيس كريم كيندر</span><span class="price-single">35</span></div>
+            <div class="item-row"><span class="item-name">أسطورة سوفت</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">ابن بطوطة سوفت</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">سوفت لوتس كراميل</span><span class="price-single">75</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FOOTER SLOGAN -->
+      <div class="footer-bar">
+        FRESHER DAYS .. SWEETER MOMENTS ✨ طعم الطبيعة .. في كل وقت 🌿 JUICE TIME QENA
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ==================== PAGE 2: BOTTOM SHEET (RTL ORDER: COL 1 FAR RIGHT TO COL 6 FAR LEFT) ==================== -->
+  <div class="a3-page page-bottom">
+    <div class="content-wrapper">
+      
+      <!-- HEADER BAR -->
+      <div class="header-bar">
+        <div class="contact-card">
+          <img src="/3D-Model.png" alt="Juice Time Mascot" class="mascot-top-img">
+          <div class="contact-info-list">
+            <div class="shop-name-tag">عصير تايم <span>JUICE TIME</span></div>
+            <div class="contact-item">
+              <span class="contact-icon">📍</span>
+              <span>قنا - حوض 10 أمام ديوان المحافظة</span>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">📞</span>
+              <span dir="ltr">01069059005</span>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">🌐</span>
+              <span>Juice Time Qena - عصير تايم قنا</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="brand-title-box">
+          <div class="brand-slogan-pill">طعم الطبيعة .. في كل وقت 🌿</div>
+          <img src="/logo.png" alt="Juice Time" class="brand-logo">
+        </div>
+      </div>
+
+      <!-- MAIN BOTTOM GRID (6 Columns Layout - RTL ORDER) -->
+      <div class="menu-grid-bottom">
+
+        <!-- COL 1 (FAR RIGHT): القهوة + مشروبات ساخنة -->
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div class="section-box">
+            <div class="sec-header orange">القهوة ☕</div>
+            <div class="dual-col-header">
+              <div class="header-spacer"></div>
+              <div class="size-labels">
+                <span class="size-lbl">Single</span>
+                <span class="size-lbl">Double</span>
+              </div>
+            </div>
+            <div class="item-row"><span class="item-name">سادة فاتح</span><div class="dual-price-box"><span class="p-cup">35</span><span class="p-liter">45</span></div></div>
+            <div class="item-row"><span class="item-name">سادة غامق</span><div class="dual-price-box"><span class="p-cup">35</span><span class="p-liter">45</span></div></div>
+            <div class="item-row"><span class="item-name">محوج فاتح</span><div class="dual-price-box"><span class="p-cup">35</span><span class="p-liter">45</span></div></div>
+            <div class="item-row"><span class="item-name">محوج غامق</span><div class="dual-price-box"><span class="p-cup">35</span><span class="p-liter">45</span></div></div>
+            <div class="item-row"><span class="item-name">قهوة فرنساوي</span><div class="dual-price-box"><span class="p-cup">40</span><span class="p-liter">50</span></div></div>
+            <div class="item-row"><span class="item-name">قهوة بندق</span><div class="dual-price-box"><span class="p-cup">50</span><span class="p-liter">60</span></div></div>
+            <div class="item-row"><span class="item-name">إسبريسو</span><div class="dual-price-box"><span class="p-cup">40</span><span class="p-liter">50</span></div></div>
+            <div class="item-row"><span class="item-name">أمريكان كوفي</span><span class="price-single">55</span></div>
+            <div class="item-row"><span class="item-name">نسكافيه بلاك</span><span class="price-single">30</span></div>
+            <div class="item-row"><span class="item-name">نسكافيه حليب</span><span class="price-single">50</span></div>
+            <div class="item-row"><span class="item-name">فوت لاتيه</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">فلات وايت</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">هوت موكا</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">هوت شوكلت</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">كابتشينو</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">كراميل هوت شوكليت</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">هوت لوتس كافيه</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">هوت سيدر</span><span class="price-single">50</span></div>
+            <div class="item-row"><span class="item-name">دبل ماكياتو</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">Pumpkine Hot Coffee</span><span class="price-single">60</span></div>
+          </div>
+
+          <div class="section-box" style="flex: 1;">
+            <div class="sec-header green">مشروبات ساخنة 🍵</div>
+            <div class="item-row"><span class="item-name">شاي</span><span class="price-single">20</span></div>
+            <div class="item-row"><span class="item-name">شاي بالحليب</span><span class="price-single">30</span></div>
+            <div class="item-row"><span class="item-name">أعشاب</span><span class="price-single">20</span></div>
+            <div class="item-row"><span class="item-name">قرفة بالحليب</span><span class="price-single">40</span></div>
+            <div class="item-row"><span class="item-name">جنزبيل حليب</span><span class="price-single">40</span></div>
+            <div class="item-row"><span class="item-name">فيتامين سي عصير تايم</span><span class="price-single">35</span></div>
+            <div class="item-row"><span class="item-name">Pinapple Spice</span><span class="price-single">50</span></div>
+          </div>
+        </div>
+
+        <!-- COL 2: أرز بلبن + ميني بان كيك + وافل + الركن الشتوي -->
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div class="section-box">
+            <div class="sec-header orange">أرز بلبن 🥣</div>
+            <div class="item-row"><span class="item-name">أرز لبن سادة</span><span class="price-single">35</span></div>
+            <div class="item-row"><span class="item-name">أرز لبن مانجو</span><span class="price-single">55</span></div>
+            <div class="item-row"><span class="item-name">أرز لبن مكسرات وعسل</span><span class="price-single">55</span></div>
+            <div class="item-row"><span class="item-name">أرز لبن آيس كريم</span><span class="price-single">55</span></div>
+            <div class="item-row"><span class="item-name">أرز لبن لوتس</span><span class="price-single">55</span></div>
+          </div>
+
+          <div class="section-box">
+            <div class="sec-header green">ميني بان كيك 🥞</div>
+            <div class="item-row"><span class="item-name">بان كيك صغير</span><span class="price-single">50</span></div>
+            <div class="item-row"><span class="item-name">بان كيك كبير</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">مكس ميني كيك</span><span class="price-single">75</span></div>
+          </div>
+
+          <div class="section-box">
+            <div class="sec-header orange">وافل 🧇</div>
+            <div class="item-row"><span class="item-name">وافل نوتيلا</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">وافل فاكهة</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">وافل عصير تايم</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">وافل جلاكسي</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">وافل كيت كات</span><span class="price-single">75</span></div>
+          </div>
+
+          <div class="section-box" style="flex: 1;">
+            <div class="sec-header orange">الركن الشتوي ❄️</div>
+            <div class="item-row"><span class="item-name">بليلة لبن مكسرات</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">حمص الشام كبير</span><span class="price-single">35</span></div>
+            <div class="item-row"><span class="item-name">حمص الشام صغير</span><span class="price-single">25</span></div>
+            <div class="item-row"><span class="item-name">بليلة لبن سادة</span><span class="price-single">50</span></div>
+            <div class="item-row"><span class="item-name">سحلب عادي</span><span class="price-single">50</span></div>
+            <div class="item-row"><span class="item-name">سحلب مكسرات</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">سحلب نوتيلا ومكسرات</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">سحلب فواكه</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">سحلب عصير تايم</span><span class="price-single">65</span></div>
+          </div>
+        </div>
+
+        <!-- COL 3: أسموزي + زبادي عصير تايم -->
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div class="section-box">
+            <div class="sec-header orange">أسموزي 🍹</div>
+            <div class="item-row"><span class="item-name">اسموزي ليمون</span><span class="price-single">50</span></div>
+            <div class="item-row"><span class="item-name">اسموزى رمان</span><span class="price-single">50</span></div>
+            <div class="item-row"><span class="item-name">اسموزى برتقال</span><span class="price-single">50</span></div>
+            <div class="item-row"><span class="item-name">اسموزي مانجو</span><span class="price-single">50</span></div>
+            <div class="item-row"><span class="item-name">اسموزي فراولة</span><span class="price-single">55</span></div>
+            <div class="item-row"><span class="item-name">اسموزي تين شوكى</span><span class="price-single">50</span></div>
+            <!-- <div class="item-row"><span class="item-name">اسموزي فراولة</span><span class="price-single">55</span></div> -->
+            <div class="item-row"><span class="item-name">اسموزي كانتالوب</span><span class="price-single">55</span></div>
+            <div class="item-row"><span class="item-name">اسموزي ليمون نعناع</span><span class="price-single">55</span></div>
+            <div class="item-row"><span class="item-name">اليكتريك ليمون</span><span class="price-single">55</span></div>
+            <div class="item-row"><span class="item-name">اسموزي توت رمان</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">اسموزي فراولة توت</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">اسموزى توت</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">اسموزى خوخ</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">اسموزي بطيخ</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">اسموزي كيوي</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">اسموزي عصير تايم</span><span class="price-single">85</span></div>
+            <div class="item-row"><span class="item-name">اسموزي أناناس</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">اسموزي كيوى أناناس</span><span class="price-single">85</span></div>
+            <div class="item-row"><span class="item-name">اسموزي برتقال أناناس</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">اسموزي مانجو كيوى</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">اسموزي مانجو فراولة</span><span class="price-single">50</span></div>
+            <div class="item-row"><span class="item-name">اسموزي مانجو خوخ</span><span class="price-single">70</span></div>
+          </div>
+
+          <div class="section-box" style="flex: 1;">
+            <div class="sec-header green">زبادي عصير تايم 🥛</div>
+            <div class="dual-col-header">
+              <div class="header-spacer"></div>
+              <div class="size-labels">
+                <span class="size-lbl">كوباية</span>
+                <span class="size-lbl">لتر</span>
+              </div>
+            </div>
+            <div class="item-row"><span class="item-name">زبادي عسل</span><div class="dual-price-box"><span class="p-cup">60</span><span class="p-liter">120</span></div></div>
+            <div class="item-row"><span class="item-name">زبادي فراولة</span><div class="dual-price-box"><span class="p-cup">70</span><span class="p-liter">120</span></div></div>
+            <div class="item-row"><span class="item-name">زبادي مانجو</span><div class="dual-price-box"><span class="p-cup">70</span><span class="p-liter">120</span></div></div>
+            <div class="item-row"><span class="item-name">زبادي مكس فواكه</span><div class="dual-price-box"><span class="p-cup">85</span><span class="p-liter">140</span></div></div>
+            <div class="item-row"><span class="item-name">زبادي موز</span><div class="dual-price-box"><span class="p-cup">60</span><span class="p-liter">120</span></div></div>
+            <div class="item-row"><span class="item-name">سوداني بحليب</span><div class="dual-price-box"><span class="p-cup">60</span><span class="p-liter">120</span></div></div>
+            <div class="item-row"><span class="item-name">بلح بحليب</span><div class="dual-price-box"><span class="p-cup">70</span><span class="p-liter">120</span></div></div>
+            <div class="item-row"><span class="item-name">زبادي توت</span><div class="dual-price-box"><span class="p-cup">70</span><span class="p-liter">140</span></div></div>
+          </div>
+        </div>
+
+        <!-- COL 4: آيس كوفي + موخيتو -->
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div class="section-box">
+            <div class="sec-header green">آيس كوفي 🧊☕</div>
+            <div class="item-row"><span class="item-name">Ice Coffee</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">Ice Latte</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">Caramel Frappu</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">Mocha Frappu</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">White Lotus Coffee</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">Toffe Nut Coffee</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">Snow Whit Farppichino</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">Pumpkine Spice Latte</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">Pumpkine Crunch</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">Match Matchitao</span><span class="price-single">55</span></div>
+            <div class="item-row"><span class="item-name">Oreo Match Farppichino</span><span class="price-single">65</span></div>
+            <div class="item-row"><span class="item-name">Caramel Coffe Machitao</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">Ice Coffee Caramel</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">Ice White Mocha</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">Ice Latte Caramel</span><span class="price-single">80</span></div>
+            <div class="item-row"><span class="item-name">Spanish Latte</span><span class="price-single">85</span></div>
+            <div class="item-row"><span class="item-name">Frappe Pistachio</span><span class="price-single">90</span></div>
+          </div>
+
+          <div class="section-box" style="flex: 1;">
+            <div class="sec-header orange">موخيتو / المشروبات 🍸</div>
+            <div class="item-row"><span class="item-name">صن شاين</span><span class="price-single">45</span></div>
+            <div class="item-row"><span class="item-name">بلو هاواي</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">موخيتو</span><span class="price-single">55</span></div>
+            <div class="item-row"><span class="item-name">فراولة موخيتو</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">مانجو موخيتو</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">كيوي موخيتو</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">اسكاي</span><span class="price-single">80</span></div>
+            <div class="item-row"><span class="item-name">موخيتو كلاسيك</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">موخيتو بلو</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">موخيتو ريد بول</span><span class="price-single">80</span></div>
+            <div class="item-row"><span class="item-name">ماى فافوريت ليمونت</span><span class="price-single">50</span></div>
+            <div class="item-row"><span class="item-name">مانجو تانجو</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">موخيتو بلوبيري</span><span class="price-single">60</span></div>
+          </div>
+        </div>
+
+        <!-- COL 5 (FAR LEFT): حلواني -->
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div class="section-box" style="flex: 1;">
+            <div class="sec-header orange">حلواني 🍰</div>
+            <div class="item-row"><span class="item-name">تشيز كيك</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">ديسباسيتو</span><span class="price-single">50</span></div>
+            <div class="item-row"><span class="item-name">طاجن لوتس</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">طاجن نوتيلا</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">طاجن أوريو</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">ريد فيلفيت</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">مولتن كيك</span><span class="price-single">60</span></div>
+            <!-- <div class="item-row"><span class="item-name">فيبل كيك</span><span class="price-single">60</span></div> -->
+            <div class="item-row"><span class="item-name">قشطوطة</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">كشري أوريو</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">ميني إكلير</span><span class="price-single">45</span></div>
+            <div class="item-row"><span class="item-name">فريسكا</span><span class="price-single">40</span></div>
+            <div class="item-row"><span class="item-name">كب مانجو</span><span class="price-single">50</span></div>
+            <div class="item-row"><span class="item-name">طاجن مكس</span><span class="price-single">60</span></div>
+            <div class="item-row"><span class="item-name">اكلير</span><span class="price-single">75</span></div>
+            <div class="item-row"><span class="item-name">مانجو موس</span><span class="price-single">150</span></div>
+            <div class="item-row"><span class="item-name">علبة سواريهات</span><span class="price-single">180</span></div>
+            <div class="item-row"><span class="item-name">كنافة كرانش</span><span class="price-single">100</span></div>
+            <div class="item-row"><span class="item-name">فادج</span><span class="price-single">70</span></div>
+            <div class="item-row"><span class="item-name">قشطوطة مانجو</span><span class="price-single">90</span></div>
+            <div class="item-row"><span class="item-name">تراميسو</span><span class="price-single">50</span></div>
+            <div class="item-row"><span class="item-name">افاترول</span><span class="price-single">35</span></div>
+            <div class="item-row"><span class="item-name">قشطوطة فراولة</span><span class="price-single">85</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FOOTER SLOGAN -->
+      <div class="footer-bar">
+        FRESHER DAYS .. SWEETER MOMENTS ✨ طعم الطبيعة .. في كل وقت 🌿 JUICE TIME QENA
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
