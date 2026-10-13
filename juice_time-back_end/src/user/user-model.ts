@@ -24,7 +24,8 @@ const UserSchema = new mongoose.Schema<IUser>({
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        select: false
     },
     role: {
         type: String,
@@ -32,6 +33,10 @@ const UserSchema = new mongoose.Schema<IUser>({
         default: Role.ADMIN,
         enum: Object.values(Role)
     }
+},
+{
+    timestamps: true,
+    versionKey: false
 });
 
 export const User = mongoose.model<IUser>("User", UserSchema);

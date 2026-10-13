@@ -8,6 +8,8 @@ import helmet from "helmet";
 import productRouter from "./src/product/product-router";
 import userRouter from "./src/user/user-router";
 import authRouter from "./src/auth/auth-router";
+import expenseCategoryRouter from "./src/expense-category/expense-category-router";
+import expenseRouter from "./src/expense/expense-router";
 // import authRouter from "./src/auth/auth-router";
 // Routers
 
@@ -44,6 +46,8 @@ app.use(express.json());
 app.use("/api/products",productRouter);
 app.use("/api/users",userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/expense-category",expenseCategoryRouter);
+app.use("/api/expense",expenseRouter);
 app.get('/', (req, res) => {
     res.status(200).send('juice time API is running');
 })
