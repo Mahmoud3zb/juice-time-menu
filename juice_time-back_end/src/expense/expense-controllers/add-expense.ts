@@ -10,12 +10,15 @@ export const addExpenseValidators = [
         .isMongoId().withMessage("Invalid expense category ID"),
     body("amount").not().isEmpty().withMessage("Amount is required")
         .isFloat({ min: 0.1 }).withMessage("Amount must be a number greater than 0"),
+    body("expenseDate").not().isEmpty().withMessage("Expense date is required")
+    .isDate().withMessage("Invalid date format")
 ]
 
 interface IRequest {
     expenseCategoryID: mongoose.Types.ObjectId;
     amount: number;
     description?: string;
+    expenseDate: Date;
 }
 
 interface IResponse {
@@ -29,7 +32,7 @@ export const addExpense: RequestHandler<{}, IResponse, IRequest> = async (
     next
 ) => {
     try {
-        const { expenseCategoryID, amount, description } = req.body;
+        const { expenseCategoryID, amount, description ,expenseDate } = req.body;
         const category = await ExpenseCategory.findOne({
             _id: expenseCategoryID,
             isActive: true
@@ -43,7 +46,8 @@ export const addExpense: RequestHandler<{}, IResponse, IRequest> = async (
         const expense = await Expense.create({
             expenseCategoryID,
             amount,
-            description
+            description,
+            expenseDate
         });
         res.status(StatusCodes.CREATED).json({
             message: "Expense added successfully",
