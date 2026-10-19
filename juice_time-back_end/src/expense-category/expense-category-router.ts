@@ -4,12 +4,9 @@ import { addExpenseCategoryValidators, addExpenseCategory } from "./expense-cate
 
 import { getExpenseCategoryById } from "./expense-category-controllers.ts/get-expense-by-id";
 import { getExpenseCategory } from "./expense-category-controllers.ts/get-expense-category";
-
-
+import { updateCategory } from "./expense-category-controllers.ts/update-category";
 
 const router=Router();
-
-
 
 router.post("/",
     addExpenseCategoryValidators,
@@ -20,5 +17,7 @@ router.post("/",
 router.get("/", getExpenseCategory);
 
 router.get("/:id", getExpenseCategoryById);
+
+router.put("/:id", updateCategory);
 
 export default router;

@@ -60,6 +60,7 @@ export const loginHandler: RequestHandler = async (req, res, next) => {
 
                 return res.status(200).json({
                         message: "Logged in successfully",
+                        token,
                         user: userWithoutPassword
                 });
         } catch (err) {

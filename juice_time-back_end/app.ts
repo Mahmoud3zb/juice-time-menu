@@ -37,10 +37,24 @@ mongoose
 
 app.use(helmet());
 
+// Enable CORS for frontend applications (Local Vite & Vercel deployment)
+app.use(cors({
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps, curl, postman) or localhost/vercel
+        if (!origin || origin.includes("localhost") || origin.includes("vercel.app")) {
+            return callback(null, true);
+        }
+        return callback(null, true); // Permissive for juice-time domains
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
+}));
 
 app.use(cookieParser());
 app.use(express.static("public"));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 // API Routes
 // app.use("/auth",authRouter);
 app.use("/api/products",productRouter);
