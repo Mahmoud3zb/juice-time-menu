@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 import { Expense } from "../../expense-model";
+import { DailyRevenue } from "../../../daily-revenue/daily-revenue-model";
 
 interface IRequestQuery {
     date?: string;
@@ -17,8 +18,13 @@ interface IResponse {
     message: string;
     data?: {
         date: string;
+        revenue: number;
+        revenueNotes?: string;
+        dailyExpenses: number;
+        afterClosingExpenses: number;
         totalExpenses: number;
         expensesCount: number;
+        netProfit: number;
         categories: ICategoryTotal[];
         expenses: unknown[];
     };
@@ -45,7 +51,7 @@ export const getDailyReport: RequestHandler<
 
         if (!isValidDateOnly(date)) {
             return res.status(StatusCodes.BAD_REQUEST).json({
-                message: "Invalid date. Use YYYY-MM-DD"
+                message: "صيغة التاريخ غير صالحة. يرجى استخدام YYYY-MM-DD"
             });
         }
 
@@ -60,17 +66,23 @@ export const getDailyReport: RequestHandler<
             }
         };
 
-        const [summary, categories, expenses] = await Promise.all([
+        const [revenueRecord, summaryByType, categories, expenses] = await Promise.all([
+            // 1. Fetch Day's Revenue
+            DailyRevenue.findOne({ date }).lean(),
+
+            // 2. Aggregate expenses broken down by expenseType (daily vs after_closing)
             Expense.aggregate([
                 { $match: match },
                 {
                     $group: {
-                        _id: null,
-                        totalExpenses: { $sum: "$amount" },
-                        expensesCount: { $sum: 1 }
+                        _id: { $ifNull: ["$expenseType", "daily"] },
+                        totalAmount: { $sum: "$amount" },
+                        count: { $sum: 1 }
                     }
                 }
             ]),
+
+            // 3. Category distribution
             Expense.aggregate([
                 { $match: match },
                 {
@@ -91,7 +103,7 @@ export const getDailyReport: RequestHandler<
                     $group: {
                         _id: "$expenseCategoryID",
                         categoryName: {
-                            $first: { $ifNull: ["$category.name", "Unknown category"] }
+                            $first: { $ifNull: ["$category.name", "مصروف عام"] }
                         },
                         totalAmount: { $sum: "$amount" },
                         expensesCount: { $sum: 1 }
@@ -108,18 +120,42 @@ export const getDailyReport: RequestHandler<
                 },
                 { $sort: { totalAmount: -1 } }
             ]),
+
+            // 4. Detailed expenses list
             Expense.find(match)
                 .populate("expenseCategoryID", "name")
                 .sort({ createdAt: -1 })
                 .lean()
         ]);
 
+        let dailyExpenses = 0;
+        let afterClosingExpenses = 0;
+        let expensesCount = 0;
+
+        summaryByType.forEach((item) => {
+            if (item._id === "after_closing") {
+                afterClosingExpenses += item.totalAmount;
+            } else {
+                dailyExpenses += item.totalAmount;
+            }
+            expensesCount += item.count;
+        });
+
+        const totalExpenses = dailyExpenses + afterClosingExpenses;
+        const revenue = revenueRecord?.amount ?? 0;
+        const netProfit = revenue - totalExpenses;
+
         return res.status(StatusCodes.OK).json({
-            message: "Daily report retrieved successfully",
+            message: "تم جلب تقرير اليوم بنجاح",
             data: {
                 date,
-                totalExpenses: summary[0]?.totalExpenses ?? 0,
-                expensesCount: summary[0]?.expensesCount ?? 0,
+                revenue,
+                revenueNotes: revenueRecord?.notes || "",
+                dailyExpenses,
+                afterClosingExpenses,
+                totalExpenses,
+                expensesCount,
+                netProfit,
                 categories,
                 expenses
             }

@@ -10,7 +10,7 @@ import userRouter from "./src/user/user-router";
 import authRouter from "./src/auth/auth-router";
 import expenseCategoryRouter from "./src/expense-category/expense-category-router";
 import expenseRouter from "./src/expense/expense-router";
-// import authRouter from "./src/auth/auth-router";
+import dailyRevenueRouter from "./src/daily-revenue/daily-revenue-router";
 // Routers
 
 dotenv.config();
@@ -62,6 +62,7 @@ app.use("/api/users",userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/expense-category",expenseCategoryRouter);
 app.use("/api/expense",expenseRouter);
+app.use("/api/daily-revenue", dailyRevenueRouter);
 app.get('/', (req, res) => {
     res.status(200).send('juice time API is running');
 })

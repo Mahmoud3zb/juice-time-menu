@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 
+export type ExpenseType = "daily" | "after_closing";
 
-interface IExpense {
+export interface IExpense {
     expenseCategoryID: mongoose.Types.ObjectId;
     amount: number;
     description?: string;
+    expenseType: ExpenseType;
     expenseDate: Date;
     createdAt?: Date;
     updatedAt?: Date;
@@ -25,14 +27,19 @@ const ExpenseSchema = new mongoose.Schema<IExpense>({
         type: String,
         required: false
     },
+    expenseType: {
+        type: String,
+        enum: ["daily", "after_closing"],
+        default: "daily",
+        required: true
+    },
     expenseDate: {
         type: Date,
         required: true
     }
-},
-    {
-        timestamps: true,
-        versionKey: false
-    });
+}, {
+    timestamps: true,
+    versionKey: false
+});
 
 export const Expense = mongoose.model<IExpense>("Expense", ExpenseSchema);
