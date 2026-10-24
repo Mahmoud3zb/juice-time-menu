@@ -5,28 +5,14 @@ import {
   Card,
   TextField,
   Button,
-  IconButton,
-  Switch,
-  Chip,
   CircularProgress,
   Divider,
   Alert,
-  Tooltip,
 } from "@mui/material";
-import {
-  AddCircle,
-  Edit,
-  Check,
-  Close,
-  Category,
-} from "@mui/icons-material";
+import { AddCircle } from "@mui/icons-material";
 import apiClient from "../../api/client";
-
-interface ExpenseCategory {
-  _id: string;
-  name: string;
-  isActive: boolean;
-}
+import type { ExpenseCategory } from "../types/expense";
+import { CategoryListItem } from "../components/settings/CategoryListItem";
 
 export const SettingsPage: React.FC = () => {
   const [categories, setCategories] = useState<ExpenseCategory[]>([]);
@@ -110,24 +96,24 @@ export const SettingsPage: React.FC = () => {
       );
       setEditingId(null);
     } catch (err: any) {
-      setActionError("فشل تعديل اسم التصنيف");
+      setActionError("فشل حفظ التعديل");
     }
   };
 
   return (
-    <Box sx={{ maxWidth: 800, mx: "auto", display: "flex", flexDirection: "column", gap: 3.5 }}>
+    <Box sx={{ maxWidth: 800, mx: "auto", display: "flex", flexDirection: "column", gap: 3 }}>
       {/* Title */}
       <Box>
         <Typography variant="h5" sx={{ fontWeight: 900, color: "text.primary" }}>
-          إعدادات تصنيفات المصروفات
+          إعدادات النظام وأقسام المصروفات
         </Typography>
-        <Typography variant="body2" sx={{ fontWeight: 600, color: "text.secondary", mt: 0.5 }}>
-          إدارة وتعديل أقسام الصرف اليومي والشهري للمحل
+        <Typography variant="caption" sx={{ fontWeight: 700, color: "text.secondary" }}>
+          إدارة تصنيفات المصروفات، تفعيلها أو تعطيلها وتعديل أسمائها
         </Typography>
       </Box>
 
       {actionError && (
-        <Alert severity="error" sx={{ borderRadius: 3, fontWeight: 700 }} onClose={() => setActionError(null)}>
+        <Alert severity="error" sx={{ borderRadius: 3, fontWeight: 700 }}>
           {actionError}
         </Alert>
       )}
@@ -146,36 +132,29 @@ export const SettingsPage: React.FC = () => {
           إضافة تصنيف جديد
         </Typography>
 
-        <Box component="form" onSubmit={handleAdd} sx={{ display: "flex", gap: 1.5, flexWrap: { xs: "wrap", sm: "nowrap" } }}>
+        <Box component="form" onSubmit={handleAdd} sx={{ display: "flex", gap: 2 }}>
           <TextField
             fullWidth
             size="small"
+            placeholder="مثال: صيانة معدات، فواتير إنترنت، سلف عمال..."
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
-            placeholder="مثال: صيانة معدات، فواتير إنترنت، خامات إضافية"
-            variant="outlined"
-            slotProps={{
-              input: {
-                sx: { borderRadius: 3, bgcolor: "grey.50", fontWeight: 700, fontSize: 14 },
-              },
-            }}
+            disabled={adding}
           />
           <Button
             type="submit"
             variant="contained"
-            disableElevation
-            disabled={adding}
-            startIcon={adding ? <CircularProgress size={16} color="inherit" /> : <AddCircle />}
+            disabled={adding || !newName.trim()}
+            startIcon={!adding && <AddCircle />}
             sx={{
               borderRadius: 3,
               fontWeight: 900,
               px: 3,
-              py: 1,
               whiteSpace: "nowrap",
-              flexShrink: 0,
+              minWidth: 130,
             }}
           >
-            {adding ? "جارٍ الإضافة..." : "إضافة تصنيف"}
+            {adding ? "جارٍ الإضافة..." : "إضافة القسم"}
           </Button>
         </Box>
       </Card>
@@ -208,90 +187,16 @@ export const SettingsPage: React.FC = () => {
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             {categories.map((cat, index) => (
               <React.Fragment key={cat._id}>
-                <Box
-                  sx={{
-                    py: 1.75,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: 2,
-                  }}
-                >
-                  {editingId === cat._id ? (
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1 }}>
-                      <TextField
-                        size="small"
-                        autoFocus
-                        value={editName}
-                        onChange={(e) => setEditName(e.target.value)}
-                        sx={{ flex: 1, maxWidth: 300 }}
-                        slotProps={{
-                          input: {
-                            sx: { borderRadius: 2.5, fontWeight: 700, fontSize: 13 },
-                          },
-                        }}
-                      />
-                      <IconButton
-                        size="small"
-                        color="success"
-                        onClick={() => handleSaveEdit(cat._id)}
-                        sx={{ bgcolor: "#dcfce7" }}
-                      >
-                        <Check fontSize="small" />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        color="inherit"
-                        onClick={() => setEditingId(null)}
-                        sx={{ bgcolor: "grey.100" }}
-                      >
-                        <Close fontSize="small" />
-                      </IconButton>
-                    </Box>
-                  ) : (
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, flex: 1 }}>
-                      <Category sx={{ color: "primary.main", fontSize: 20 }} />
-                      <Typography variant="body2" sx={{ fontWeight: 800, color: "text.primary" }}>
-                        {cat.name}
-                      </Typography>
-                      <Chip
-                        label={cat.isActive ? "نشط" : "معطل"}
-                        size="small"
-                        sx={{
-                          fontWeight: 800,
-                          fontSize: 11,
-                          height: 22,
-                          bgcolor: cat.isActive ? "#ecfdf5" : "grey.100",
-                          color: cat.isActive ? "#059669" : "text.secondary",
-                        }}
-                      />
-                    </Box>
-                  )}
-
-                  {/* Actions (Toggle active & edit) */}
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Tooltip title={cat.isActive ? "تعطيل التصنيف" : "تفعيل التصنيف"}>
-                      <Switch
-                        size="small"
-                        checked={cat.isActive}
-                        onChange={() => handleToggleActive(cat)}
-                        color="primary"
-                      />
-                    </Tooltip>
-
-                    {editingId !== cat._id && (
-                      <Tooltip title="تعديل الاسم">
-                        <IconButton
-                          size="small"
-                          onClick={() => handleStartEdit(cat)}
-                          sx={{ color: "text.secondary", "&:hover": { color: "primary.main" } }}
-                        >
-                          <Edit fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                  </Box>
-                </Box>
+                <CategoryListItem
+                  cat={cat}
+                  isEditing={editingId === cat._id}
+                  editName={editName}
+                  onEditNameChange={setEditName}
+                  onStartEdit={handleStartEdit}
+                  onSaveEdit={handleSaveEdit}
+                  onCancelEdit={() => setEditingId(null)}
+                  onToggleActive={handleToggleActive}
+                />
                 {index < categories.length - 1 && <Divider />}
               </React.Fragment>
             ))}

@@ -4,89 +4,76 @@ import {
   Box,
   Typography,
   Card,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
   Button,
-  CircularProgress,
-  Alert,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
   TextField,
+  IconButton,
   Tooltip,
-  Chip,
-  InputAdornment,
+  Alert,
 } from "@mui/material";
 import {
   ChevronRight,
   ChevronLeft,
-  Delete,
-  CalendarMonth,
-  AttachMoney,
-  AccountBalanceWallet,
-  NightlightOutlined,
-  WbSunnyOutlined,
   EditNote,
+  Download,
 } from "@mui/icons-material";
 import apiClient from "../../api/client";
 import { getBusinessDate } from "../utils/dateUtils";
-
-interface ExpenseItem {
-  _id: string;
-  amount: number;
-  description?: string;
-  expenseType?: "daily" | "after_closing";
-  expenseDate: string;
-  createdAt: string;
-  expenseCategoryID: {
-    _id: string;
-    name: string;
-  } | string;
-}
-
-interface DailyReportData {
-  date: string;
-  revenue: number;
-  revenueNotes?: string;
-  dailyExpenses: number;
-  afterClosingExpenses: number;
-  totalExpenses: number;
-  expensesCount: number;
-  netProfit: number;
-  expenses: ExpenseItem[];
-}
+import type { DailyReportData } from "../types/expense";
+import { FinancialCards } from "../components/shared/FinancialCards";
+import { RevenueDialog } from "../components/shared/RevenueDialog";
+import { DeleteConfirmDialog } from "../components/shared/DeleteConfirmDialog";
+import { DailyExpenseTable } from "../components/reports/DailyExpenseTable";
+import { DailyReportExportModal } from "../components/reports/DailyReportExportModal";
 
 export const DailyReportPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialDate = searchParams.get("date") || getBusinessDate();
+  const dateFromUrl = searchParams.get("date");
+  const [selectedDate, setSelectedDate] = useState<string>(dateFromUrl || getBusinessDate());
 
-  const [selectedDate, setSelectedDate] = useState<string>(initialDate);
+  // Sync state when URL query parameter changes
+  useEffect(() => {
+    if (dateFromUrl && dateFromUrl !== selectedDate) {
+      setSelectedDate(dateFromUrl);
+    }
+  }, [dateFromUrl]);
+
+  const handleDateChange = (newDate: string) => {
+    setSelectedDate(newDate);
+    setSearchParams({ date: newDate });
+  };
+
   const [data, setData] = useState<DailyReportData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Revenue Modal state
+  // Revenue Modal
   const [revenueModalOpen, setRevenueModalOpen] = useState(false);
-  const [revenueInput, setRevenueInput] = useState<string>("");
-  const [revenueNotes, setRevenueNotes] = useState<string>("");
-  const [savingRevenue, setSavingRevenue] = useState(false);
 
-  // Delete modal state
+  // Export Sheet Modal (Image & PDF)
+  const [exportModalOpen, setExportModalOpen] = useState(false);
+
+  // Delete Expense Modal
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [targetExpenseId, setTargetExpenseId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
 
+  const formatArabicDate = (dateStr: string) => {
+    try {
+      const [y, m, d] = dateStr.split("-").map(Number);
+      const dateObj = new Date(y, m - 1, d);
+      return new Intl.DateTimeFormat("ar-EG", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }).format(dateObj);
+    } catch {
+      return dateStr;
+    }
+  };
+
   useEffect(() => {
     fetchReport();
-    setSearchParams({ date: selectedDate }, { replace: true });
   }, [selectedDate]);
 
   const fetchReport = async () => {
@@ -94,114 +81,62 @@ export const DailyReportPage: React.FC = () => {
       setLoading(true);
       setError(null);
       const res = await apiClient.get(`/api/expense/reports/daily?date=${selectedDate}`);
-      const reportData: DailyReportData = res.data.data;
-      setData(reportData);
-      setRevenueInput(reportData.revenue > 0 ? reportData.revenue.toString() : "");
-      setRevenueNotes(reportData.revenueNotes || "");
+      setData(res.data.data);
     } catch (err: any) {
       console.error("Failed to load daily report:", err);
-      setError("تعذر جلب تقرير اليوم من السيرفر. يرجى التحقق من الاتصال.");
+      setError("تعذر جلب تقرير اليوم المحدد من السيرفر.");
     } finally {
       setLoading(false);
     }
   };
 
   const shiftDate = (days: number) => {
-    const current = new Date(selectedDate);
-    current.setDate(current.getDate() + days);
-    setSelectedDate(current.toISOString().slice(0, 10));
+    const [y, m, d] = selectedDate.split("-").map(Number);
+    const dateObj = new Date(y, m - 1, d);
+    dateObj.setDate(dateObj.getDate() + days);
+    const newY = dateObj.getFullYear();
+    const newM = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const newD = String(dateObj.getDate()).padStart(2, "0");
+    handleDateChange(`${newY}-${newM}-${newD}`);
   };
 
-  const formatArabicDate = (dateStr: string) => {
-    try {
-      const d = new Date(dateStr);
-      return new Intl.DateTimeFormat("ar-EG", {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }).format(d);
-    } catch {
-      return dateStr;
-    }
+  const handleRevenueSuccess = (newAmount: number, notes: string) => {
+    setData((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        revenue: newAmount,
+        revenueNotes: notes,
+        netProfit: newAmount - prev.totalExpenses,
+      };
+    });
   };
 
-  const formatTime = (isoString: string) => {
-    try {
-      const d = new Date(isoString);
-      return new Intl.DateTimeFormat("ar-EG", {
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true,
-      }).format(d);
-    } catch {
-      return "—";
-    }
-  };
-
-  const normalizeDigits = (str: string) => {
-    return str.replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d).toString());
-  };
-
-  const handleSaveRevenue = async () => {
-    const parsed = parseFloat(normalizeDigits(revenueInput));
-    if (isNaN(parsed) || parsed < 0) {
-      alert("يرجى إدخال مبلغ إيراد صحيح (صفر أو أكثر)");
-      return;
-    }
-    try {
-      setSavingRevenue(true);
-      await apiClient.post("/api/daily-revenue", {
-        date: selectedDate,
-        amount: parsed,
-        notes: revenueNotes,
-      });
-      setData((prev) => {
-        if (!prev) return null;
-        return {
-          ...prev,
-          revenue: parsed,
-          revenueNotes,
-          netProfit: parsed - prev.totalExpenses,
-        };
-      });
-      setRevenueModalOpen(false);
-    } catch (err: any) {
-      alert(err.response?.data?.message || "فشل حفظ الإيراد اليومي");
-    } finally {
-      setSavingRevenue(false);
-    }
-  };
-
-  const openDeleteDialog = (id: string) => {
-    setTargetExpenseId(id);
-    setDeleteModalOpen(true);
-  };
-
-  const handleConfirmDelete = async () => {
+  const handleDeleteExpense = async () => {
     if (!targetExpenseId) return;
     try {
       setDeleting(true);
       await apiClient.delete(`/api/expense/${targetExpenseId}`);
-      setData((prev) => {
-        if (!prev) return null;
-        const deletedItem = prev.expenses.find((e) => e._id === targetExpenseId);
-        const deletedAmount = deletedItem ? deletedItem.amount : 0;
-        const isAfterClosing = deletedItem?.expenseType === "after_closing";
-        const newDailyExp = isAfterClosing ? prev.dailyExpenses : Math.max(0, prev.dailyExpenses - deletedAmount);
-        const newAfterExp = isAfterClosing ? Math.max(0, prev.afterClosingExpenses - deletedAmount) : prev.afterClosingExpenses;
-        const newTotal = newDailyExp + newAfterExp;
+      if (data) {
+        const deleted = data.expenses.find((e) => e._id === targetExpenseId);
+        const deletedAmt = deleted ? deleted.amount : 0;
+        const deletedType = deleted?.expenseType || "daily";
 
-        return {
-          ...prev,
-          dailyExpenses: newDailyExp,
-          afterClosingExpenses: newAfterExp,
-          totalExpenses: newTotal,
-          expensesCount: Math.max(0, prev.expensesCount - 1),
-          netProfit: prev.revenue - newTotal,
-          expenses: prev.expenses.filter((e) => e._id !== targetExpenseId),
-        };
-      });
+        const newExpenses = data.expenses.filter((e) => e._id !== targetExpenseId);
+        const newTotalExpenses = data.totalExpenses - deletedAmt;
+        const newDailyExpenses = deletedType === "daily" ? data.dailyExpenses - deletedAmt : data.dailyExpenses;
+        const newAfterClosingExpenses = deletedType === "after_closing" ? data.afterClosingExpenses - deletedAmt : data.afterClosingExpenses;
+
+        setData({
+          ...data,
+          expenses: newExpenses,
+          expensesCount: newExpenses.length,
+          totalExpenses: newTotalExpenses,
+          dailyExpenses: newDailyExpenses,
+          afterClosingExpenses: newAfterClosingExpenses,
+          netProfit: data.revenue - newTotalExpenses,
+        });
+      }
       setDeleteModalOpen(false);
       setTargetExpenseId(null);
     } catch (err: any) {
@@ -211,32 +146,23 @@ export const DailyReportPage: React.FC = () => {
     }
   };
 
-  const categoryColors = [
-    "#f97316", "#10b981", "#3b82f6", "#8b5cf6", "#ec4899", "#f59e0b", "#06b6d4"
-  ];
-  const getCategoryColor = (name: string) => {
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) hash += name.charCodeAt(i);
-    return categoryColors[Math.abs(hash) % categoryColors.length];
-  };
-
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-      {/* Top Header & Date Switcher */}
+    <Box sx={{ display: "flex", flexDirection: "column", gap: { xs: 2.5, sm: 3.5 } }}>
+      {/* Top Header & Date Navigation */}
       <Box
         sx={{
           display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          alignItems: { xs: "flex-start", md: "center" },
           justifyContent: "space-between",
+          alignItems: { xs: "flex-start", sm: "center" },
+          flexDirection: { xs: "column", sm: "row" },
           gap: 2,
         }}
       >
         <Box>
-          <Typography variant="h5" sx={{ fontWeight: 900, color: "text.primary" }}>
-            يومية المحل (الإيرادات والمصروفات)
+          <Typography variant="h5" sx={{ fontWeight: 900, color: "#0f172a", fontSize: { xs: "1.35rem", sm: "1.75rem" } }}>
+            تقرير اليومية ونقدية الدرج 📋
           </Typography>
-          <Typography variant="caption" sx={{ fontWeight: 700, color: "text.secondary" }}>
+          <Typography variant="body2" sx={{ fontWeight: 600, color: "text.secondary", mt: 0.5 }}>
             تقفيل الحسابات، مبيعات اليوم، المصروفات التشغيلية ومصاريف بعد التقفيل
           </Typography>
         </Box>
@@ -252,6 +178,28 @@ export const DailyReportPage: React.FC = () => {
             sx={{ borderRadius: 3, fontWeight: 900, px: 2, py: 0.8 }}
           >
             {data && data.revenue > 0 ? "تعديل إيراد اليوم" : "+ تسجيل إيراد اليوم"}
+          </Button>
+
+          <Button
+            variant="outlined"
+            startIcon={<Download />}
+            onClick={() => setExportModalOpen(true)}
+            sx={{
+              borderRadius: 3,
+              fontWeight: 900,
+              px: 2,
+              py: 0.8,
+              borderColor: "divider",
+              color: "#0f172a",
+              bgcolor: "background.paper",
+              "&:hover": {
+                bgcolor: "grey.50",
+                borderColor: "primary.main",
+                color: "primary.main",
+              },
+            }}
+          >
+            تصدير الشيت (صورة / PDF) 📥
           </Button>
 
           <Card
@@ -277,7 +225,7 @@ export const DailyReportPage: React.FC = () => {
               type="date"
               size="small"
               value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
+              onChange={(e) => handleDateChange(e.target.value)}
               variant="standard"
               slotProps={{
                 input: {
@@ -330,471 +278,56 @@ export const DailyReportPage: React.FC = () => {
         </Alert>
       )}
 
-      {/* 4 Financial Cards (Revenue, Daily Expense, After Closing Expense, Net Profit) */}
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(4, 1fr)" },
-          gap: 2,
+      {/* 4 Financial Cards */}
+      <FinancialCards
+        revenue={data?.revenue ?? 0}
+        dailyExpenses={data?.dailyExpenses ?? 0}
+        afterClosingExpenses={data?.afterClosingExpenses ?? 0}
+        netProfit={data?.netProfit ?? 0}
+        loading={loading}
+        onRevenueClick={() => setRevenueModalOpen(true)}
+      />
+
+      {/* Detailed Expenses Table Component */}
+      <DailyExpenseTable
+        expenses={data?.expenses ?? []}
+        totalExpenses={data?.totalExpenses ?? 0}
+        loading={loading}
+        onDeleteClick={(id) => {
+          setTargetExpenseId(id);
+          setDeleteModalOpen(true);
         }}
-      >
-        {/* Card 1: Daily Revenue */}
-        <Card
-          sx={{
-            bgcolor: "#f0fdf4",
-            border: "1px solid #dcfce7",
-            borderRadius: 4,
-            p: 2.5,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Box>
-            <Typography variant="caption" sx={{ fontWeight: 800, color: "#16a34a", display: "block" }}>
-              إيراد اليوم (المبيعات)
-            </Typography>
-            <Typography variant="h5" sx={{ fontWeight: 900, color: "#166534", mt: 0.5 }}>
-              {loading ? "..." : (data?.revenue ?? 0).toLocaleString()}{" "}
-              <Typography component="span" variant="caption" sx={{ fontWeight: 800, color: "#166534" }}>
-                ج.م
-              </Typography>
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              width: 44,
-              height: 44,
-              borderRadius: 3,
-              bgcolor: "white",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#16a34a",
-              boxShadow: "0 2px 6px rgba(22,163,74,0.12)",
-            }}
-          >
-            <AttachMoney />
-          </Box>
-        </Card>
+      />
 
-        {/* Card 2: Daily Expenses (Shift) */}
-        <Card
-          sx={{
-            bgcolor: "#fff1f2",
-            border: "1px solid #ffe4e6",
-            borderRadius: 4,
-            p: 2.5,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Box>
-            <Typography variant="caption" sx={{ fontWeight: 800, color: "#e11d48", display: "block" }}>
-              مصروف يومي (الشيفت)
-            </Typography>
-            <Typography variant="h5" sx={{ fontWeight: 900, color: "#be123c", mt: 0.5 }}>
-              {loading ? "..." : (data?.dailyExpenses ?? 0).toLocaleString()}{" "}
-              <Typography component="span" variant="caption" sx={{ fontWeight: 800, color: "#be123c" }}>
-                ج.م
-              </Typography>
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              width: 44,
-              height: 44,
-              borderRadius: 3,
-              bgcolor: "white",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#e11d48",
-              boxShadow: "0 2px 6px rgba(225,29,72,0.12)",
-            }}
-          >
-            <WbSunnyOutlined />
-          </Box>
-        </Card>
-
-        {/* Card 3: After Closing Expenses */}
-        <Card
-          sx={{
-            bgcolor: "#faf5ff",
-            border: "1px solid #f3e8ff",
-            borderRadius: 4,
-            p: 2.5,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Box>
-            <Typography variant="caption" sx={{ fontWeight: 800, color: "#9333ea", display: "block" }}>
-              مصروف بعد التقفيل
-            </Typography>
-            <Typography variant="h5" sx={{ fontWeight: 900, color: "#6b21a8", mt: 0.5 }}>
-              {loading ? "..." : (data?.afterClosingExpenses ?? 0).toLocaleString()}{" "}
-              <Typography component="span" variant="caption" sx={{ fontWeight: 800, color: "#6b21a8" }}>
-                ج.م
-              </Typography>
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              width: 44,
-              height: 44,
-              borderRadius: 3,
-              bgcolor: "white",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#9333ea",
-              boxShadow: "0 2px 6px rgba(147,51,234,0.12)",
-            }}
-          >
-            <NightlightOutlined />
-          </Box>
-        </Card>
-
-        {/* Card 4: Net Day Total (الصافي) */}
-        <Card
-          sx={{
-            bgcolor: (data?.netProfit ?? 0) >= 0 ? "#eff6ff" : "#fff7ed",
-            border: "1px solid",
-            borderColor: (data?.netProfit ?? 0) >= 0 ? "#dbeafe" : "#ffedd5",
-            borderRadius: 4,
-            p: 2.5,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Box>
-            <Typography
-              variant="caption"
-              sx={{ fontWeight: 800, color: (data?.netProfit ?? 0) >= 0 ? "#2563eb" : "#ea580c", display: "block" }}
-            >
-              صافي اليومية (الدرج)
-            </Typography>
-            <Typography
-              variant="h5"
-              sx={{
-                fontWeight: 900,
-                color: (data?.netProfit ?? 0) >= 0 ? "#1e40af" : "#c2410c",
-                mt: 0.5,
-              }}
-            >
-              {loading ? "..." : (data?.netProfit ?? 0).toLocaleString()}{" "}
-              <Typography component="span" variant="caption" sx={{ fontWeight: 800 }}>
-                ج.م
-              </Typography>
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              width: 44,
-              height: 44,
-              borderRadius: 3,
-              bgcolor: "white",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: (data?.netProfit ?? 0) >= 0 ? "#2563eb" : "#ea580c",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
-            }}
-          >
-            <AccountBalanceWallet />
-          </Box>
-        </Card>
-      </Box>
-
-      {/* Main Table Card */}
-      <Card
-        sx={{
-          borderRadius: 4,
-          border: "1px solid",
-          borderColor: "divider",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
-          p: { xs: 2, sm: 3 },
-        }}
-      >
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
-          <Typography variant="h6" sx={{ fontWeight: 900, color: "text.primary" }}>
-            تفاصيل مصروفات اليوم ({data?.expensesCount ?? 0})
-          </Typography>
-        </Box>
-
-        {loading ? (
-          <Box sx={{ py: 10, display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-            <CircularProgress size={32} thickness={4} />
-            <Typography variant="body2" sx={{ fontWeight: 700, color: "text.secondary" }}>
-              جارٍ إعداد التقرير اليومي...
-            </Typography>
-          </Box>
-        ) : !data || data.expenses.length === 0 ? (
-          <Box sx={{ py: 8, textAlign: "center" }}>
-            <CalendarMonth sx={{ fontSize: 52, color: "text.disabled", mb: 1 }} />
-            <Typography variant="h6" sx={{ fontWeight: 800, color: "text.primary", mb: 0.5 }}>
-              لا توجد مصروفات مسجلة لهذا اليوم
-            </Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 600 }}>
-              اختر يوماً آخر أو أضف مصروفاً جديداً من القائمة الجانبية.
-            </Typography>
-          </Box>
-        ) : (
-          <Box>
-            <TableContainer component={Paper} elevation={0} sx={{ bgcolor: "transparent" }}>
-              <Table sx={{ minWidth: 650 }}>
-                <TableHead>
-                  <TableRow sx={{ "& th": { fontWeight: 800, color: "text.secondary", fontSize: 13, borderColor: "divider" } }}>
-                    <TableCell align="right" sx={{ pr: 1, width: 40 }}>#</TableCell>
-                    <TableCell align="right">التصنيف (القسم)</TableCell>
-                    <TableCell align="center">نوع المصروف</TableCell>
-                    <TableCell align="right">المبلغ</TableCell>
-                    <TableCell align="right">التفاصيل</TableCell>
-                    <TableCell align="right">الوقت</TableCell>
-                    <TableCell align="center" sx={{ width: 80 }}>إجراءات</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {data.expenses.map((item, index) => {
-                    const catName =
-                      typeof item.expenseCategoryID === "object" && item.expenseCategoryID !== null
-                        ? item.expenseCategoryID.name
-                        : "عام";
-                    const dotColor = getCategoryColor(catName);
-                    const isAfterClosing = item.expenseType === "after_closing";
-
-                    return (
-                      <TableRow
-                        key={item._id}
-                        hover
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                          "& td": { borderColor: "rgba(0,0,0,0.04)", py: 1.75 },
-                        }}
-                      >
-                        <TableCell align="right" sx={{ pr: 1, color: "text.disabled", fontWeight: 700, fontSize: 13 }}>
-                          {index + 1}
-                        </TableCell>
-
-                        {/* Category */}
-                        <TableCell align="right">
-                          <Box sx={{ display: "inline-flex", alignItems: "center", gap: 1 }}>
-                            <Box sx={{ width: 8, height: 8, borderRadius: "50%", bgcolor: dotColor }} />
-                            <Typography variant="body2" sx={{ fontWeight: 800, color: "text.primary" }}>
-                              {catName}
-                            </Typography>
-                          </Box>
-                        </TableCell>
-
-                        {/* Type Chip */}
-                        <TableCell align="center">
-                          <Chip
-                            icon={isAfterClosing ? <NightlightOutlined sx={{ fontSize: "14px !important" }} /> : <WbSunnyOutlined sx={{ fontSize: "14px !important" }} />}
-                            label={isAfterClosing ? "بعد التقفيل" : "أثناء الشيفت"}
-                            size="small"
-                            sx={{
-                              fontWeight: 800,
-                              fontSize: 11,
-                              bgcolor: isAfterClosing ? "#f3e8ff" : "#f1f5f9",
-                              color: isAfterClosing ? "#7c3aed" : "#475569",
-                              borderRadius: 2,
-                            }}
-                          />
-                        </TableCell>
-
-                        {/* Amount */}
-                        <TableCell align="right">
-                          <Typography variant="body2" sx={{ fontWeight: 900, color: "text.primary" }}>
-                            {item.amount.toLocaleString()}{" "}
-                            <Typography component="span" variant="caption" sx={{ fontWeight: 700, color: "text.secondary" }}>
-                              ج.م
-                            </Typography>
-                          </Typography>
-                        </TableCell>
-
-                        {/* Description */}
-                        <TableCell align="right">
-                          <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 600 }}>
-                            {item.description || "—"}
-                          </Typography>
-                        </TableCell>
-
-                        {/* Time */}
-                        <TableCell align="right">
-                          <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700 }}>
-                            {formatTime(item.createdAt || item.expenseDate)}
-                          </Typography>
-                        </TableCell>
-
-                        {/* Actions */}
-                        <TableCell align="center">
-                          <Tooltip title="حذف هذا المصروف">
-                            <IconButton
-                              size="small"
-                              onClick={() => openDeleteDialog(item._id)}
-                              sx={{
-                                color: "error.main",
-                                "&:hover": { bgcolor: "error.lighter" },
-                              }}
-                            >
-                              <Delete fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </TableContainer>
-
-            {/* Bottom Summary Bar */}
-            <Box
-              sx={{
-                mt: 4,
-                pt: 2.5,
-                borderTop: "2px solid",
-                borderColor: "divider",
-                display: "flex",
-                flexDirection: { xs: "column", sm: "row" },
-                alignItems: { xs: "flex-start", sm: "center" },
-                justifyContent: "space-between",
-                gap: 2,
-              }}
-            >
-              <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
-                <Typography variant="body2" sx={{ fontWeight: 700, color: "text.secondary" }}>
-                  المصروف اليومي: <strong style={{ color: "#be123c" }}>{(data?.dailyExpenses ?? 0).toLocaleString()} ج.م</strong>
-                </Typography>
-                <Typography variant="body2" sx={{ fontWeight: 700, color: "text.secondary" }}>
-                  بعد التقفيل: <strong style={{ color: "#7c3aed" }}>{(data?.afterClosingExpenses ?? 0).toLocaleString()} ج.م</strong>
-                </Typography>
-                <Typography variant="body2" sx={{ fontWeight: 700, color: "text.secondary" }}>
-                  إجمالي المصروفات: <strong style={{ color: "#1e293b" }}>{(data?.totalExpenses ?? 0).toLocaleString()} ج.م</strong>
-                </Typography>
-              </Box>
-
-              <Box sx={{ textAlign: { xs: "right", sm: "left" } }}>
-                <Typography variant="caption" sx={{ fontWeight: 800, color: "text.secondary", display: "block" }}>
-                  صافي اليومية المتبقي
-                </Typography>
-                <Typography
-                  variant="h5"
-                  sx={{
-                    fontWeight: 900,
-                    color: (data?.netProfit ?? 0) >= 0 ? "success.main" : "error.main",
-                  }}
-                >
-                  {(data?.netProfit ?? 0).toLocaleString()} ج.م
-                </Typography>
-              </Box>
-            </Box>
-          </Box>
-        )}
-      </Card>
-
-      {/* Modal to Set / Update Daily Revenue */}
-      <Dialog
+      {/* Revenue Entry / Update Modal */}
+      <RevenueDialog
         open={revenueModalOpen}
-        onClose={() => !savingRevenue && setRevenueModalOpen(false)}
-        slotProps={{ paper: { sx: { borderRadius: 4, p: 1, maxWidth: 420, width: "100%" } } }}
-        dir="rtl"
-      >
-        <DialogTitle sx={{ fontWeight: 900, fontSize: 18 }}>
-          تسجيل إيراد يوم ({formatArabicDate(selectedDate)})
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText sx={{ fontWeight: 600, color: "text.secondary", mb: 2.5 }}>
-            أدخل إجمالي مبيعات الدرج لليوم لحساب صافي الأرباح والنقدية تلقائياً.
-          </DialogContentText>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <TextField
-              autoFocus
-              fullWidth
-              label="مبلغ الإيراد اليومي"
-              type="text"
-              value={revenueInput}
-              onChange={(e) => setRevenueInput(normalizeDigits(e.target.value))}
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Typography sx={{ fontWeight: 900, color: "text.secondary" }}>ج.م</Typography>
-                    </InputAdornment>
-                  ),
-                },
-              }}
-            />
-            <TextField
-              fullWidth
-              multiline
-              rows={2}
-              label="ملاحظات (اختياري)"
-              placeholder="مثال: مبيعات شفت الصباح + المساء"
-              value={revenueNotes}
-              onChange={(e) => setRevenueNotes(e.target.value)}
-            />
-          </Box>
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2.5, gap: 1 }}>
-          <Button
-            onClick={() => setRevenueModalOpen(false)}
-            disabled={savingRevenue}
-            variant="outlined"
-            sx={{ borderRadius: 3, fontWeight: 800 }}
-          >
-            إلغاء
-          </Button>
-          <Button
-            onClick={handleSaveRevenue}
-            disabled={savingRevenue}
-            variant="contained"
-            color="success"
-            disableElevation
-            sx={{ borderRadius: 3, fontWeight: 900, px: 3 }}
-          >
-            {savingRevenue ? "جارٍ الحفظ..." : "حفظ الإيراد"}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        date={selectedDate}
+        formattedDate={formatArabicDate(selectedDate)}
+        initialAmount={data?.revenue}
+        initialNotes={data?.revenueNotes}
+        onClose={() => setRevenueModalOpen(false)}
+        onSuccess={handleRevenueSuccess}
+      />
 
       {/* Confirmation Dialog for Deleting Expense */}
-      <Dialog
+      <DeleteConfirmDialog
         open={deleteModalOpen}
-        onClose={() => !deleting && setDeleteModalOpen(false)}
-        slotProps={{ paper: { sx: { borderRadius: 4, p: 1, minWidth: 320 } } }}
-      >
-        <DialogTitle sx={{ fontWeight: 900, fontSize: 18 }}>تأكيد حذف المصروف</DialogTitle>
-        <DialogContent>
-          <DialogContentText sx={{ fontWeight: 600, color: "text.secondary" }}>
-            هل أنت متأكد من رغبتك في حذف هذا المصروف؟ سيتم خصمه فوراً وتعديل صافي اليومية.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
-          <Button
-            onClick={() => setDeleteModalOpen(false)}
-            disabled={deleting}
-            variant="outlined"
-            sx={{ borderRadius: 3, fontWeight: 800 }}
-          >
-            إلغاء
-          </Button>
-          <Button
-            onClick={handleConfirmDelete}
-            disabled={deleting}
-            variant="contained"
-            color="error"
-            disableElevation
-            sx={{ borderRadius: 3, fontWeight: 900 }}
-          >
-            {deleting ? "جارٍ الحذف..." : "تأكيد الحذف"}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        title="تأكيد حذف المصروف"
+        content="هل أنت متأكد من رغبتك في حذف هذا المصروف؟ سيتم خصمه فوراً وتعديل صافي اليومية."
+        loading={deleting}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={handleDeleteExpense}
+      />
+
+      {/* Export Daily Sheet Modal (Image & PDF) */}
+      <DailyReportExportModal
+        open={exportModalOpen}
+        onClose={() => setExportModalOpen(false)}
+        data={data}
+        date={selectedDate}
+        formattedDate={formatArabicDate(selectedDate)}
+      />
     </Box>
   );
 };

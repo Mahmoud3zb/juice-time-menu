@@ -12,22 +12,14 @@ import {
   InputAdornment,
   Alert,
   CircularProgress,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   ToggleButtonGroup,
   ToggleButton,
 } from "@mui/material";
 import { SaveOutlined, Add, WbSunnyOutlined, NightlightOutlined } from "@mui/icons-material";
-import apiClient from "../../api/client";
+import { apiClient, isAuthError, getErrorMessage } from "../../api/client";
 import { getBusinessDate } from "../utils/dateUtils";
-
-interface ExpenseCategory {
-  _id: string;
-  name: string;
-  isActive: boolean;
-}
+import type { ExpenseCategory, ExpenseType } from "../types/expense";
+import { NewCategoryDialog } from "../components/shared/NewCategoryDialog";
 
 export const AddExpensePage: React.FC = () => {
   const navigate = useNavigate();
@@ -35,7 +27,7 @@ export const AddExpensePage: React.FC = () => {
   const [categories, setCategories] = useState<ExpenseCategory[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
-  const [expenseType, setExpenseType] = useState<"daily" | "after_closing">("daily");
+  const [expenseType, setExpenseType] = useState<ExpenseType>("daily");
   const [description, setDescription] = useState<string>("");
   const [expenseDate, setExpenseDate] = useState<string>(getBusinessDate());
 
@@ -43,11 +35,7 @@ export const AddExpensePage: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-
-  // Quick Add Category Modal state
   const [showAddCatModal, setShowAddCatModal] = useState(false);
-  const [newCatName, setNewCatName] = useState("");
-  const [addingCat, setAddingCat] = useState(false);
 
   useEffect(() => {
     fetchCategories();
@@ -57,7 +45,7 @@ export const AddExpensePage: React.FC = () => {
     try {
       setLoadingCategories(true);
       const res = await apiClient.get("/api/expense-category");
-      const catList: ExpenseCategory[] = res.data.data || [];
+      const catList: any[] = res.data.data || [];
       const activeList = catList.filter((c) => c.isActive !== false);
       setCategories(activeList);
       if (activeList.length > 0 && !selectedCategory) {
@@ -81,28 +69,9 @@ export const AddExpensePage: React.FC = () => {
     setAmount(normalized);
   };
 
-  const handleCreateCategory = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newCatName.trim() || newCatName.trim().length < 3) {
-      alert("اسم التصنيف يجب أن يكون 3 أحرف على الأقل");
-      return;
-    }
-    try {
-      setAddingCat(true);
-      const res = await apiClient.post("/api/expense-category", {
-        name: newCatName.trim(),
-        isActive: true,
-      });
-      const created = res.data.data;
-      setCategories((prev) => [...prev, created]);
-      setSelectedCategory(created._id);
-      setNewCatName("");
-      setShowAddCatModal(false);
-    } catch (err: any) {
-      alert(err.response?.data?.message || "فشل إضافة التصنيف");
-    } finally {
-      setAddingCat(false);
-    }
+  const handleCategoryCreated = (newCat: ExpenseCategory) => {
+    setCategories((prev) => [...prev, newCat]);
+    setSelectedCategory(newCat._id);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -135,19 +104,19 @@ export const AddExpensePage: React.FC = () => {
       setAmount("");
       setDescription("");
 
+      const isToday = expenseDate === getBusinessDate();
       setTimeout(() => {
-        navigate("/admin/reports/daily?date=" + expenseDate);
-      }, 1000);
-    } catch (err: any) {
+        if (isToday) {
+          navigate("/admin");
+        } else {
+          navigate(`/admin/reports/daily?date=${expenseDate}`);
+        }
+      }, 800);
+    } catch (err: unknown) {
+      if (isAuthError(err)) return;
       console.error("Error adding expense:", err);
-      const serverErrors = err.response?.data?.errors;
-      const formatted = Array.isArray(serverErrors)
-        ? serverErrors.map((e: any) => e.message).join("، ")
-        : err.response?.data?.message;
-
       setError(
-        formatted ||
-        "تعذر حفظ المصروف. يرجى التأكد من البيانات والمحاولة مجدداً."
+        getErrorMessage(err, "تعذر حفظ المصروف. يرجى التأكد من البيانات والمحاولة مجدداً.")
       );
     } finally {
       setSubmitting(false);
@@ -166,7 +135,7 @@ export const AddExpensePage: React.FC = () => {
         </Typography>
       </Box>
 
-      {/* Main Form Card matching Screen 3 */}
+      {/* Main Form Card */}
       <Card
         sx={{
           borderRadius: 6,
@@ -244,7 +213,7 @@ export const AddExpensePage: React.FC = () => {
                 startIcon={<Add sx={{ fontSize: 16 }} />}
                 sx={{ fontSize: "0.75rem", fontWeight: 800, color: "#2563eb", p: 0.5 }}
               >
-                 قسم جديد
+                قسم جديد
               </Button>
             </Box>
 
@@ -354,44 +323,11 @@ export const AddExpensePage: React.FC = () => {
       </Card>
 
       {/* Dialog to Add New Category */}
-      <Dialog
+      <NewCategoryDialog
         open={showAddCatModal}
         onClose={() => setShowAddCatModal(false)}
-        slotProps={{ paper: { sx: { borderRadius: 5, p: 1, maxWidth: 440, width: "100%" } } }}
-        dir="rtl"
-      >
-        <DialogTitle sx={{ fontWeight: 900, fontSize: "1.2rem", pb: 1 }}>
-          إضافة تصنيف مصروفات جديد
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body2" sx={{ color: "#64748b", fontWeight: 600, mb: 3 }}>
-            مثل: شحن كهربا محل، طلبات محل، فواتير إنترنت، سلف...
-          </Typography>
-          <TextField
-            autoFocus
-            fullWidth
-            placeholder="اسم التصنيف (3 أحرف على الأقل)"
-            value={newCatName}
-            onChange={(e) => setNewCatName(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 3, gap: 1 }}>
-          <Button
-            onClick={() => setShowAddCatModal(false)}
-            sx={{ borderRadius: 3, fontWeight: 800, color: "#64748b" }}
-          >
-            إلغاء
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleCreateCategory}
-            disabled={addingCat}
-            sx={{ borderRadius: 3, fontWeight: 900, px: 3 }}
-          >
-            {addingCat ? "جارٍ الحفظ..." : "إضافة القسم"}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onCategoryCreated={handleCategoryCreated}
+      />
     </Box>
   );
 };

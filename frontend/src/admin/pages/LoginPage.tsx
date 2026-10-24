@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, Navigate, Link as RouterLink } from "react-router-dom";
+import { useNavigate, Navigate, Link as RouterLink, useSearchParams } from "react-router-dom";
 import {
   Box,
   Card,
@@ -28,6 +28,9 @@ import { adminMuiTheme } from "../theme/muiTheme";
 export const LoginPage: React.FC = () => {
   const { isAuthenticated, login } = useAuth();
   const navigate = useNavigate();
+
+  const [searchParams] = useSearchParams();
+  const isSessionExpired = searchParams.get("expired") === "1";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -121,6 +124,23 @@ export const LoginPage: React.FC = () => {
                 ادخل بياناتك للدخول إلى حسابك
               </Typography>
             </Box>
+
+            {isSessionExpired && !error && (
+              <Alert
+                severity="info"
+                sx={{
+                  mb: 3,
+                  borderRadius: 3.5,
+                  fontWeight: 700,
+                  fontSize: "0.85rem",
+                  bgcolor: "#eff6ff",
+                  color: "#1e40af",
+                  border: "1px solid #bfdbfe",
+                }}
+              >
+                انتهت صلاحية الجلسة للأمان. يرجى تسجيل الدخول مجدداً للمتابعة.
+              </Alert>
+            )}
 
             {error && (
               <Alert

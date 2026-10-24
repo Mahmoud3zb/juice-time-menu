@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
+import { isTokenExpired, handleSessionExpired } from "../../api/client";
+
 export interface User {
   _id: string;
   name: string;
@@ -24,21 +26,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    try {
-      const storedToken = localStorage.getItem("juice_time_token");
-      const storedUser = localStorage.getItem("juice_time_user");
+    const validateAuth = () => {
+      try {
+        const storedToken = localStorage.getItem("juice_time_token");
+        const storedUser = localStorage.getItem("juice_time_user");
 
-      if (storedToken && storedUser) {
-        setToken(storedToken);
-        setUser(JSON.parse(storedUser));
+        if (storedToken && storedUser) {
+          if (isTokenExpired(storedToken)) {
+            handleSessionExpired();
+            setToken(null);
+            setUser(null);
+          } else {
+            setToken(storedToken);
+            setUser(JSON.parse(storedUser));
+          }
+        } else {
+          setToken(null);
+          setUser(null);
+        }
+      } catch (err) {
+        console.error("Error reading auth state from localStorage:", err);
+        handleSessionExpired();
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      console.error("Error reading auth state from localStorage:", err);
-      localStorage.removeItem("juice_time_token");
-      localStorage.removeItem("juice_time_user");
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    validateAuth();
+    window.addEventListener("focus", validateAuth);
+    return () => window.removeEventListener("focus", validateAuth);
   }, []);
 
   const login = (newToken: string, newUser: User) => {

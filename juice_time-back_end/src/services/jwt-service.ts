@@ -8,7 +8,7 @@ const SECRET = process.env.secretKey!;
 
 export const jwtService = {
 createToken(payload: object, opts?: jwt.SignOptions) {
-return jwt.sign(payload, SECRET, { expiresIn: "2h", ...opts });
+return jwt.sign(payload, SECRET, { expiresIn: "30d", ...opts });
 },
     verifyToken<T = any>(token: string) {
     try {

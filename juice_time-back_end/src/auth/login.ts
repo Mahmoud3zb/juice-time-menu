@@ -37,22 +37,22 @@ export const loginHandler: RequestHandler = async (req, res, next) => {
 
                 const token = jwtService.createToken(
                         { id: user._id, email: user.email, role: user.role }, 
-                        { expiresIn: "2h" }
+                        { expiresIn: "30d" }
                 );
 
                 const refreshToken = jwtService.createToken(
                         { id: user._id, email: user.email, role: user.role },
-                        { expiresIn: "7d" }
+                        { expiresIn: "60d" }
                 );
 
                 res.cookie("token", token, {
                         ...COOKIE_OPTIONS,
-                        maxAge: 2 * 60 * 60 * 1000,
+                        maxAge: 30 * 24 * 60 * 60 * 1000,
                 });
 
                 res.cookie("refreshToken", refreshToken, {
                         ...COOKIE_OPTIONS,
-                        maxAge: 7 * 24 * 60 * 60 * 1000, 
+                        maxAge: 60 * 24 * 60 * 60 * 1000, 
                 });
 
                 const userObj = user.toObject();
