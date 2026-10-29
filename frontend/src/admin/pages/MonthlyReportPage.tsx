@@ -95,7 +95,7 @@ export const MonthlyReportPage: React.FC = () => {
             gap: 1.5,
             px: 1.5,
             py: 0.75,
-            borderRadius: 3,
+            borderRadius: 1.5,
             borderColor: "divider",
             bgcolor: "background.paper",
             boxShadow: "0 1px 3px rgba(0,0,0,0.03)",
@@ -131,7 +131,7 @@ export const MonthlyReportPage: React.FC = () => {
       {error && (
         <Alert
           severity="error"
-          sx={{ borderRadius: 3, fontWeight: 700 }}
+          sx={{ borderRadius: 1.5, fontWeight: 700 }}
           action={
             <Button color="inherit" size="small" onClick={fetchMonthlyReport} sx={{ fontWeight: 800 }}>
               إعادة المحاولة

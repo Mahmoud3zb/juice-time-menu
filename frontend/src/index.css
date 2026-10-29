@@ -9,6 +9,7 @@
     background-color: #f8f9fa;
     -webkit-tap-highlight-color: transparent;
     direction: rtl;
+    font-family: 'Cairo', system-ui, -apple-system, sans-serif;
   }
 }
 

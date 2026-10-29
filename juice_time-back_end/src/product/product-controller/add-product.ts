@@ -11,28 +11,50 @@ export const addProductValidators = [
 
 interface IRequest {
     name: string;
-    prices: {
-        cup: number;
-        liter?: number;
-    };
+    prices?: any;
+    "prices.cup"?: any;
+    "prices.liter"?: any;
     description?: string;
+    imageurl?: string;
     type: string;
+    [key: string]: any;
 }
 
 interface IResponse {
     message: string;
-    data?:unknown
+    data?: unknown;
 }
-export const addProduct: RequestHandler<{},IResponse,IRequest> = async (req, res, next) => {
-    try{
-        const {name, prices, description, type} = req.body;
-        const imageurl = req.file?.path;
+export const addProduct: RequestHandler<{}, IResponse, IRequest> = async (req, res, next) => {
+    try {
+        const { name, prices, description, type, priceType } = req.body;
+        const imageurl = req.file?.path || req.body.imageurl || "";
+        let finalPrices: { cup: number; liter?: number } = { cup: 0 };
+
+        if (typeof prices === "string") {
+            try {
+                finalPrices = JSON.parse(prices);
+            } catch {
+                finalPrices = { cup: 0 };
+            }
+        } else if (prices && typeof prices === "object") {
+            finalPrices = { ...prices };
+        }
+
+        if (req.body["prices.cup"] !== undefined) {
+            finalPrices.cup = Number(req.body["prices.cup"]);
+        }
+        if (req.body["prices.liter"] !== undefined && req.body["prices.liter"] !== "") {
+            finalPrices.liter = Number(req.body["prices.liter"]);
+        }
+
         const product = await Product.create({
             name,
-            prices,
+            prices: finalPrices,
+            priceType: priceType || (finalPrices.liter ? "cup_liter" : "single_price"),
             description,
-            imageurl: imageurl||"",
-            type});
+            imageurl,
+            type
+        });
         if(!product){
             return res.status(400).json({message: "Product not created"});
         }

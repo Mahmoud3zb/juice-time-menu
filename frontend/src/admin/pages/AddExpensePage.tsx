@@ -138,21 +138,21 @@ export const AddExpensePage: React.FC = () => {
       {/* Main Form Card */}
       <Card
         sx={{
-          borderRadius: 6,
+          borderRadius: 2,
           p: { xs: 3, sm: 4.5 },
           backgroundColor: "#ffffff",
-          boxShadow: "0 20px 40px -15px rgba(0, 0, 0, 0.05)",
+          boxShadow: "0 4px 20px -5px rgba(0, 0, 0, 0.05)",
           border: "1px solid #f1f5f9",
         }}
       >
         {error && (
-          <Alert severity="error" sx={{ mb: 3, borderRadius: 3.5, fontWeight: 700 }}>
+          <Alert severity="error" sx={{ mb: 3, borderRadius: 1.5, fontWeight: 700 }}>
             {error}
           </Alert>
         )}
 
         {success && (
-          <Alert severity="success" sx={{ mb: 3, borderRadius: 3.5, fontWeight: 700 }}>
+          <Alert severity="success" sx={{ mb: 3, borderRadius: 1.5, fontWeight: 700 }}>
             {success}
           </Alert>
         )}
@@ -169,22 +169,22 @@ export const AddExpensePage: React.FC = () => {
               onChange={(_, val) => val && setExpenseType(val)}
               fullWidth
               sx={{
-                borderRadius: 3.5,
+                borderRadius: 2,
                 p: 0.5,
                 bgcolor: "grey.100",
                 "& .MuiToggleButton-root": {
                   border: "none",
-                  borderRadius: 3,
+                  borderRadius: 1.5,
                   py: 1.2,
                   fontWeight: 800,
                   fontSize: "0.9rem",
                   gap: 1,
                   "&.Mui-selected": {
-                    bgcolor: expenseType === "daily" ? "#2563eb" : "#7c3aed",
+                    bgcolor: expenseType === "daily" ? "#009a74" : "#7c3aed",
                     color: "#ffffff",
                     boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                     "&:hover": {
-                      bgcolor: expenseType === "daily" ? "#1d4ed8" : "#6d28d9",
+                      bgcolor: expenseType === "daily" ? "#008262" : "#6d28d9",
                     },
                   },
                 },
@@ -211,7 +211,7 @@ export const AddExpensePage: React.FC = () => {
                 size="small"
                 onClick={() => setShowAddCatModal(true)}
                 startIcon={<Add sx={{ fontSize: 16 }} />}
-                sx={{ fontSize: "0.75rem", fontWeight: 800, color: "#2563eb", p: 0.5 }}
+                sx={{ fontSize: "0.75rem", fontWeight: 800, color: "#009a74", p: 0.5 }}
               >
                 قسم جديد
               </Button>
@@ -223,7 +223,7 @@ export const AddExpensePage: React.FC = () => {
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 displayEmpty
                 disabled={loadingCategories}
-                sx={{ borderRadius: 3.5, fontWeight: 800 }}
+                sx={{ borderRadius: 1.5, fontWeight: 800 }}
               >
                 <MenuItem value="" disabled>
                   <em>اختر نوع المصروف</em>
@@ -300,17 +300,17 @@ export const AddExpensePage: React.FC = () => {
             disabled={submitting}
             startIcon={!submitting && <SaveOutlined />}
             sx={{
-              py: 1.8,
+              py: 1.5,
               mt: 1,
-              borderRadius: 3.5,
+              borderRadius: 1.5,
               fontWeight: 900,
               fontSize: "1rem",
               background: expenseType === "after_closing"
                 ? "linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)"
-                : "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
+                : "linear-gradient(135deg, #009a74 0%, #007a5c 100%)",
               boxShadow: expenseType === "after_closing"
-                ? "0 10px 25px -5px rgba(124, 58, 237, 0.4)"
-                : "0 10px 25px -5px rgba(37, 99, 235, 0.4)",
+                ? "0 6px 18px -4px rgba(124, 58, 237, 0.4)"
+                : "0 6px 18px -4px rgba(0, 154, 116, 0.4)",
             }}
           >
             {submitting ? (

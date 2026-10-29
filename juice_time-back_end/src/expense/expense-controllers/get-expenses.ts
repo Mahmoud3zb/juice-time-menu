@@ -45,7 +45,7 @@ export const getExpenses: RequestHandler<
                 });
             }
 
-            filter.expensecategoryID = new mongoose.Types.ObjectId(categoryID);
+            filter.expenseCategoryID = new mongoose.Types.ObjectId(categoryID);
         }
 
         if (date) {
@@ -117,7 +117,7 @@ export const getExpenses: RequestHandler<
 
         const [expenses, total] = await Promise.all([
             Expense.find(filter)
-                .populate("expensecategoryID", "name")
+                .populate("expenseCategoryID", "name")
                 .sort({ expenseDate: -1, createdAt: -1 })
                 .skip((page - 1) * limit)
                 .limit(limit),

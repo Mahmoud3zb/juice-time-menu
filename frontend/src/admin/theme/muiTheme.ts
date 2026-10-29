@@ -13,15 +13,15 @@ export const adminMuiTheme = createTheme({
   },
   palette: {
     primary: {
-      main: "#2563eb",
-      light: "#60a5fa",
-      dark: "#1d4ed8",
+      main: "#009a74",
+      light: "#05b387",
+      dark: "#007a5c",
       contrastText: "#ffffff",
     },
     secondary: {
-      main: "#0d1829",
-      light: "#1e293b",
-      dark: "#0a1120",
+      main: "#f37021",
+      light: "#ff8533",
+      dark: "#c25410",
       contrastText: "#ffffff",
     },
     error: {
@@ -30,14 +30,14 @@ export const adminMuiTheme = createTheme({
       dark: "#be123c",
     },
     success: {
-      main: "#059669",
-      light: "#dcfce7",
-      dark: "#047857",
+      main: "#009a74",
+      light: "#e6f5f1",
+      dark: "#007a5c",
     },
     warning: {
-      main: "#d97706",
-      light: "#fef3c7",
-      dark: "#b45309",
+      main: "#f37021",
+      light: "#fff7ed",
+      dark: "#c25410",
     },
     background: {
       default: "#f8fafc",
@@ -49,18 +49,18 @@ export const adminMuiTheme = createTheme({
     },
   },
   shape: {
-    borderRadius: 16,
+    borderRadius: 8,
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 14,
-          padding: "10px 22px",
+          borderRadius: 8,
+          padding: "8px 18px",
           fontSize: "0.875rem",
           boxShadow: "none",
           "&:hover": {
-            boxShadow: "0 10px 15px -3px rgba(37, 99, 235, 0.2)",
+            boxShadow: "0 6px 14px -3px rgba(0, 154, 116, 0.25)",
           },
         },
       },
@@ -68,8 +68,8 @@ export const adminMuiTheme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 24,
-          boxShadow: "0 10px 30px -5px rgba(0, 0, 0, 0.04)",
+          borderRadius: 12,
+          boxShadow: "0 2px 12px rgba(0, 0, 0, 0.03)",
           border: "1px solid #f1f5f9",
         },
       },
@@ -77,20 +77,20 @@ export const adminMuiTheme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          borderRadius: 20,
+          borderRadius: 12,
         },
       },
     },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          borderRadius: 14,
+          borderRadius: 8,
           backgroundColor: "#f8fafc",
           "&:hover .MuiOutlinedInput-notchedOutline": {
             borderColor: "#cbd5e1",
           },
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#2563eb",
+            borderColor: "#009a74",
             borderWidth: 2,
           },
         },

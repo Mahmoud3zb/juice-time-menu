@@ -8,6 +8,8 @@ export interface IProduct extends mongoose.Document {
         cup: number;
         liter?: number;
     };
+    priceType?: 'cup_liter' | 'single_double' | 'single_price';
+    order?: number;
     description?: string;
     imageurl?: string;
     type: string;
@@ -39,9 +41,18 @@ const productSchema = new mongoose.Schema<IProduct>({
         type: String,
         required: false
     },
+    priceType: {
+        type: String,
+        enum: ['cup_liter', 'single_double', 'single_price'],
+        default: 'cup_liter'
+    },
     type: {
         type: String,
         required: true
+    },
+    order: {
+        type: Number,
+        default: 0
     }
 },
     {

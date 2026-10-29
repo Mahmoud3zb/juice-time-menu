@@ -48,7 +48,7 @@ export const FinancialCards: React.FC<FinancialCardsProps> = ({
         sx={{
           backgroundColor: "#f0fdf4",
           borderColor: "#dcfce7",
-          borderRadius: { xs: 3.5, sm: 4 },
+          borderRadius: 2.5,
           p: 0.5,
           cursor: onRevenueClick ? "pointer" : "default",
           transition: "all 0.2s ease-in-out",
@@ -80,7 +80,7 @@ export const FinancialCards: React.FC<FinancialCardsProps> = ({
               sx={{
                 width: { xs: 30, sm: 40 },
                 height: { xs: 30, sm: 40 },
-                borderRadius: 2.5,
+                borderRadius: 1.5,
                 bgcolor: "white",
                 display: "flex",
                 alignItems: "center",
@@ -113,7 +113,7 @@ export const FinancialCards: React.FC<FinancialCardsProps> = ({
         sx={{
           backgroundColor: "#fff1f2",
           borderColor: "#ffe4e6",
-          borderRadius: { xs: 3.5, sm: 4 },
+          borderRadius: 2.5,
           p: 0.5,
         }}
       >
@@ -133,7 +133,7 @@ export const FinancialCards: React.FC<FinancialCardsProps> = ({
               sx={{
                 width: { xs: 30, sm: 40 },
                 height: { xs: 30, sm: 40 },
-                borderRadius: 2.5,
+                borderRadius: 1.5,
                 bgcolor: "white",
                 display: "flex",
                 alignItems: "center",
@@ -166,7 +166,7 @@ export const FinancialCards: React.FC<FinancialCardsProps> = ({
         sx={{
           backgroundColor: "#faf5ff",
           borderColor: "#f3e8ff",
-          borderRadius: { xs: 3.5, sm: 4 },
+          borderRadius: 2.5,
           p: 0.5,
         }}
       >
@@ -186,7 +186,7 @@ export const FinancialCards: React.FC<FinancialCardsProps> = ({
               sx={{
                 width: { xs: 30, sm: 40 },
                 height: { xs: 30, sm: 40 },
-                borderRadius: 2.5,
+                borderRadius: 1.5,
                 bgcolor: "white",
                 display: "flex",
                 alignItems: "center",
@@ -217,9 +217,9 @@ export const FinancialCards: React.FC<FinancialCardsProps> = ({
       {/* 4. صافي النقدية / الدرج */}
       <Card
         sx={{
-          backgroundColor: isNetPositive ? "#eff6ff" : "#fff7ed",
-          borderColor: isNetPositive ? "#dbeafe" : "#ffedd5",
-          borderRadius: { xs: 3.5, sm: 4 },
+          backgroundColor: isNetPositive ? "#e6f5f1" : "#fff7ed",
+          borderColor: isNetPositive ? "#ccefe5" : "#ffedd5",
+          borderRadius: 2.5,
           p: 0.5,
         }}
       >
@@ -229,7 +229,7 @@ export const FinancialCards: React.FC<FinancialCardsProps> = ({
               variant="caption"
               sx={{
                 fontWeight: 800,
-                color: isNetPositive ? "#2563eb" : "#ea580c",
+                color: isNetPositive ? "#009a74" : "#ea580c",
                 fontSize: { xs: "0.75rem", sm: "0.85rem" },
               }}
             >
@@ -239,13 +239,13 @@ export const FinancialCards: React.FC<FinancialCardsProps> = ({
               sx={{
                 width: { xs: 30, sm: 40 },
                 height: { xs: 30, sm: 40 },
-                borderRadius: 2.5,
+                borderRadius: 1.5,
                 bgcolor: "white",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: isNetPositive ? "#2563eb" : "#ea580c",
-                boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
+                color: isNetPositive ? "#009a74" : "#ea580c",
+                boxShadow: isNetPositive ? "0 2px 6px rgba(0,154,116,0.15)" : "0 2px 6px rgba(234,88,12,0.15)",
               }}
             >
               <AccountBalanceWallet sx={{ fontSize: { xs: 17, sm: 22 } }} />
@@ -255,7 +255,7 @@ export const FinancialCards: React.FC<FinancialCardsProps> = ({
             variant="h6"
             sx={{
               fontWeight: 900,
-              color: isNetPositive ? "#1e40af" : "#c2410c",
+              color: isNetPositive ? "#007a5c" : "#c2410c",
               fontSize: { xs: "1.15rem", sm: "1.45rem" },
             }}
           >

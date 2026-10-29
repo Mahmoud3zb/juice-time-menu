@@ -89,11 +89,11 @@ export const LoginPage: React.FC = () => {
           sx={{
             width: "100%",
             maxWidth: 960,
-            borderRadius: { xs: 5, md: 7 },
+            borderRadius: { xs: 2, md: 3 },
             overflow: "hidden",
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
-            boxShadow: "0 25px 60px -15px rgba(15, 23, 42, 0.12)",
+            boxShadow: "0 20px 50px -15px rgba(15, 23, 42, 0.1)",
             border: "1px solid rgba(226, 232, 240, 0.8)",
           }}
         >
@@ -130,12 +130,12 @@ export const LoginPage: React.FC = () => {
                 severity="info"
                 sx={{
                   mb: 3,
-                  borderRadius: 3.5,
+                  borderRadius: 1.5,
                   fontWeight: 700,
                   fontSize: "0.85rem",
-                  bgcolor: "#eff6ff",
-                  color: "#1e40af",
-                  border: "1px solid #bfdbfe",
+                  bgcolor: "#e6f5f1",
+                  color: "#007a5c",
+                  border: "1px solid #a7f3d0",
                 }}
               >
                 انتهت صلاحية الجلسة للأمان. يرجى تسجيل الدخول مجدداً للمتابعة.
@@ -147,7 +147,7 @@ export const LoginPage: React.FC = () => {
                 severity="error"
                 sx={{
                   mb: 3,
-                  borderRadius: 3.5,
+                  borderRadius: 1.5,
                   fontWeight: 700,
                   fontSize: "0.85rem",
                 }}
@@ -210,15 +210,15 @@ export const LoginPage: React.FC = () => {
                 variant="contained"
                 disabled={loading}
                 sx={{
-                  py: 1.8,
+                  py: 1.5,
                   mt: 1.5,
                   fontSize: "1rem",
                   fontWeight: 900,
-                  borderRadius: 4,
-                  background: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
-                  boxShadow: "0 10px 25px -5px rgba(37, 99, 235, 0.4)",
+                  borderRadius: 1.5,
+                  background: "linear-gradient(135deg, #009a74 0%, #007a5c 100%)",
+                  boxShadow: "0 6px 20px -4px rgba(0, 154, 116, 0.4)",
                   "&:hover": {
-                    background: "linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%)",
+                    background: "linear-gradient(135deg, #008262 0%, #006047 100%)",
                   },
                 }}
               >
@@ -242,7 +242,7 @@ export const LoginPage: React.FC = () => {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: 0.8,
-                  "&:hover": { color: "#2563eb" },
+                  "&:hover": { color: "#009a74" },
                   transition: "color 0.2s",
                 }}
               >
@@ -256,7 +256,7 @@ export const LoginPage: React.FC = () => {
           <Box
             sx={{
               width: { xs: "100%", md: "50%" },
-              background: "linear-gradient(145deg, #0a1324 0%, #0d1b33 50%, #13274c 100%)",
+              background: "linear-gradient(145deg, #06231c 0%, #0b3429 50%, #0f4637 100%)",
               p: { xs: 5, md: 7 },
               color: "#ffffff",
               display: "flex",
@@ -277,8 +277,8 @@ export const LoginPage: React.FC = () => {
                   backgroundColor: "rgba(255, 255, 255, 0.08)",
                   px: 2,
                   py: 0.8,
-                  borderRadius: 10,
-                  color: "#93c5fd",
+                  borderRadius: 1.5,
+                  color: "#6ee7b7",
                   border: "1px solid rgba(255, 255, 255, 0.1)",
                 }}
               >
@@ -291,9 +291,9 @@ export const LoginPage: React.FC = () => {
                 sx={{
                   width: 96,
                   height: 96,
-                  borderRadius: 6,
-                  backgroundColor: "rgba(37, 99, 235, 0.25)",
-                  border: "2px solid rgba(96, 165, 250, 0.35)",
+                  borderRadius: 2.5,
+                  backgroundColor: "rgba(0, 154, 116, 0.25)",
+                  border: "2px solid rgba(52, 211, 153, 0.35)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -301,18 +301,18 @@ export const LoginPage: React.FC = () => {
                   boxShadow: "0 20px 40px rgba(0, 0, 0, 0.3)",
                 }}
               >
-                <AccountBalanceWallet sx={{ fontSize: 50, color: "#60a5fa" }} />
+                <AccountBalanceWallet sx={{ fontSize: 50, color: "#34d399" }} />
               </Box>
 
               <Typography variant="h4" sx={{ fontWeight: 900, color: "#ffffff", mb: 1.5, letterSpacing: -0.5 }}>
                 إدارة مصروفات المحل
               </Typography>
-              <Typography variant="body2" sx={{ color: "rgba(191, 219, 254, 0.85)", fontWeight: 600, maxWidth: 300, lineHeight: 1.7 }}>
+              <Typography variant="body2" sx={{ color: "rgba(209, 250, 229, 0.85)", fontWeight: 600, maxWidth: 300, lineHeight: 1.7 }}>
                 سجل مصروفاتك .. واطلع على تفاصيل يومك وتقاريرك المالية بكل سهولة ودقة.
               </Typography>
             </Box>
 
-            <Typography variant="caption" sx={{ color: "rgba(147, 197, 253, 0.5)", fontWeight: 700 }}>
+            <Typography variant="caption" sx={{ color: "rgba(110, 231, 183, 0.6)", fontWeight: 700 }}>
               عصير تايم © {new Date().getFullYear()} - جميع الحقوق محفوظة
             </Typography>
           </Box>

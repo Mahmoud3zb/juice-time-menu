@@ -3,8 +3,10 @@ import { Expense, ExpenseType } from "../expense-model";
 import mongoose from "mongoose";
 import { StatusCodes } from "http-status-codes";
 import { body } from "express-validator";
+import { ExpenseCategory } from "../../expense-category/expense-category-model";
 
 export const updateExpenseValidators = [
+    body("expenseCategoryID").optional().isMongoId().withMessage("معرف تصنيف المصروف غير صالح"),
     body("amount").optional().isFloat({ min: 0.1 }).withMessage("المبلغ يجب أن يكون رقماً أكبر من صفر"),
     body("description").optional().isString().withMessage("التفاصيل يجب أن تكون نصية"),
     body("expenseType").optional().isIn(["daily", "after_closing"]).withMessage("نوع المصروف غير صالح"),
@@ -12,6 +14,7 @@ export const updateExpenseValidators = [
 ];
 
 interface IRequest {
+    expenseCategoryID?: mongoose.Types.ObjectId;
     amount?: number;
     description?: string;
     expenseType?: ExpenseType;
@@ -26,13 +29,25 @@ interface IResponse {
 export const updateExpense: RequestHandler<{ id: string }, IResponse, IRequest> = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { amount, description, expenseType, expenseDate } = req.body;
+        const { expenseCategoryID, amount, description, expenseType, expenseDate } = req.body;
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 message: "معرف المصروف غير صالح"
             });
         }
         const updateObj: Partial<IRequest> = {};
+        if (expenseCategoryID !== undefined) {
+            const category = await ExpenseCategory.findOne({
+                _id: expenseCategoryID,
+                isActive: true
+            });
+            if (!category) {
+                return res.status(StatusCodes.BAD_REQUEST).json({
+                    message: "تصنيف المصروف غير موجود أو معطل"
+                });
+            }
+            updateObj.expenseCategoryID = expenseCategoryID;
+        }
         if (amount !== undefined) {
             updateObj.amount = amount;
         }

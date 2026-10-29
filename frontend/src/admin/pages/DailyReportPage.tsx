@@ -175,7 +175,7 @@ export const DailyReportPage: React.FC = () => {
             disableElevation
             startIcon={<EditNote />}
             onClick={() => setRevenueModalOpen(true)}
-            sx={{ borderRadius: 3, fontWeight: 900, px: 2, py: 0.8 }}
+            sx={{ borderRadius: 1.5, fontWeight: 800, px: 2, py: 0.8 }}
           >
             {data && data.revenue > 0 ? "تعديل إيراد اليوم" : "+ تسجيل إيراد اليوم"}
           </Button>
@@ -185,8 +185,8 @@ export const DailyReportPage: React.FC = () => {
             startIcon={<Download />}
             onClick={() => setExportModalOpen(true)}
             sx={{
-              borderRadius: 3,
-              fontWeight: 900,
+              borderRadius: 1.5,
+              fontWeight: 800,
               px: 2,
               py: 0.8,
               borderColor: "divider",
@@ -209,7 +209,7 @@ export const DailyReportPage: React.FC = () => {
               alignItems: "center",
               gap: 1,
               p: 0.75,
-              borderRadius: 3,
+              borderRadius: 1.5,
               borderColor: "divider",
               bgcolor: "background.paper",
               boxShadow: "0 1px 3px rgba(0,0,0,0.03)",

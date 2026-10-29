@@ -113,7 +113,7 @@ export const SettingsPage: React.FC = () => {
       </Box>
 
       {actionError && (
-        <Alert severity="error" sx={{ borderRadius: 3, fontWeight: 700 }}>
+        <Alert severity="error" sx={{ borderRadius: 1.5, fontWeight: 700 }}>
           {actionError}
         </Alert>
       )}
@@ -121,10 +121,10 @@ export const SettingsPage: React.FC = () => {
       {/* Add New Category Card */}
       <Card
         sx={{
-          borderRadius: 4,
+          borderRadius: 2,
           border: "1px solid",
           borderColor: "divider",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
+          boxShadow: "0 2px 12px rgba(0,0,0,0.03)",
           p: 3,
         }}
       >
@@ -147,7 +147,7 @@ export const SettingsPage: React.FC = () => {
             disabled={adding || !newName.trim()}
             startIcon={!adding && <AddCircle />}
             sx={{
-              borderRadius: 3,
+              borderRadius: 1.5,
               fontWeight: 900,
               px: 3,
               whiteSpace: "nowrap",
@@ -162,10 +162,10 @@ export const SettingsPage: React.FC = () => {
       {/* Categories List Card */}
       <Card
         sx={{
-          borderRadius: 4,
+          borderRadius: 2,
           border: "1px solid",
           borderColor: "divider",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
+          boxShadow: "0 2px 12px rgba(0,0,0,0.03)",
           p: 3,
         }}
       >

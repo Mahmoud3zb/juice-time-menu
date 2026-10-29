@@ -8,7 +8,7 @@ export function Footer() {
   return (
     <footer
       aria-label="أسفل الصفحة ومعلومات التواصل"
-      className="bg-white border-t-[1.5px] border-brand-green/80 rounded-t-3xl px-4 py-2.5 flex justify-between items-center fixed bottom-0 w-full max-w-md shadow-[0_-10px_20px_rgba(0,0,0,0.06)] z-50 font-sans"
+      className="bg-white border-t border-brand-green/30 rounded-t-xl px-4 py-2.5 flex justify-between items-center fixed bottom-0 w-full max-w-md shadow-[0_-6px_20px_rgba(0,0,0,0.04)] z-50 font-sans"
     >
       {/* Right Section: Action Icons + Contact Info */}
       <div className="flex items-center gap-2.5 min-w-0">

@@ -89,7 +89,7 @@ export const AdminLayout: React.FC = () => {
                   onClick={handleDrawerToggle}
                   sx={{
                     bgcolor: "rgba(255,255,255,0.08)",
-                    borderRadius: 2.5,
+                    borderRadius: 1.5,
                     p: 0.9,
                     color: "#ffffff",
                     "&:hover": { bgcolor: "rgba(255,255,255,0.16)" },
@@ -111,15 +111,15 @@ export const AdminLayout: React.FC = () => {
                 size="small"
                 startIcon={<AddIcon sx={{ fontSize: 16 }} />}
                 sx={{
-                  backgroundColor: "#2563eb",
+                  backgroundColor: "#009a74",
                   color: "#ffffff",
                   fontWeight: 900,
                   borderRadius: 2.5,
                   px: 1.8,
                   py: 0.65,
                   fontSize: "0.82rem",
-                  boxShadow: "0 2px 8px rgba(37,99,235,0.35)",
-                  "&:hover": { backgroundColor: "#1d4ed8" },
+                  boxShadow: "0 2px 8px rgba(0,154,116,0.35)",
+                  "&:hover": { backgroundColor: "#008262" },
                 }}
               >
                 + مصروف

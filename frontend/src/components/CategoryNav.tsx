@@ -20,7 +20,7 @@ export function CategoryNav({ categories, activeCategory, onCategoryChange }: Ca
                 onClick={() => onCategoryChange(cat.id)}
                 aria-pressed={isActive}
                 aria-label={`قسم ${cat.nameAr} - ${cat.nameEn || ''}`}
-                className={`flex flex-col items-center justify-center min-w-[92px] h-[88px] px-2 rounded-2xl transition-all duration-300 border-[1.5px] cursor-pointer group
+                className={`flex flex-col items-center justify-center min-w-[92px] h-[88px] px-2 rounded-xl transition-all duration-300 border-[1.5px] cursor-pointer group
                   ${
                     isActive
                       ? 'bg-brand-green text-white border-brand-green shadow-md shadow-brand-green/25 scale-[1.02]'
@@ -29,7 +29,7 @@ export function CategoryNav({ categories, activeCategory, onCategoryChange }: Ca
               >
                 {/* Image container box */}
                 <div
-                  className={`w-9 h-9 rounded-xl overflow-hidden mb-1 flex items-center justify-center p-0.5 border transition-all duration-300 ${
+                  className={`w-9 h-9 rounded-lg overflow-hidden mb-1 flex items-center justify-center p-0.5 border transition-all duration-300 ${
                     isActive
                       ? 'bg-white/20 border-white/40 shadow-sm'
                       : 'bg-orange-50/60 border-orange-100 group-hover:scale-105'

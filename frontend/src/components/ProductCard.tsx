@@ -22,9 +22,9 @@ export function ProductCard({ product }: ProductCardProps) {
       : undefined;
 
   return (
-    <article className="py-4 border-b border-gray-200/60 last:border-b-0 flex items-start gap-3.5 sm:gap-4 transition-colors hover:bg-black/[0.01] rounded-2xl px-1">
-      {/* 1. Image Container - Squircle with soft pastel background */}
-      <div className="relative w-[92px] h-[108px] sm:w-[100px] sm:h-[116px] rounded-[1.5rem] bg-[#F5EFE9] border border-[#EBE2D8]/60 flex items-center justify-center flex-shrink-0 p-2 overflow-hidden group shadow-sm">
+    <article className="py-4 border-b border-gray-200/60 last:border-b-0 flex items-start gap-3.5 sm:gap-4 transition-colors hover:bg-black/[0.01] rounded-xl px-1">
+      {/* 1. Image Container - Modern rounded rectangle with soft background */}
+      <div className="relative w-[92px] h-[108px] sm:w-[100px] sm:h-[116px] rounded-xl bg-[#F5EFE9] border border-[#EBE2D8]/60 flex items-center justify-center flex-shrink-0 p-2 overflow-hidden group shadow-sm">
         <img
           src={imageUrl}
           alt={product.nameAr}
@@ -81,7 +81,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 <div
                   key={idx}
                   className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold transition-transform active:scale-95 ${
-                    s.name === 'كباية'
+                    idx === 0 || s.name === 'كباية' || s.name === 'سنجل'
                       ? 'bg-amber-50 text-brand-orange border border-amber-200/80'
                       : 'bg-emerald-50 text-brand-green border border-emerald-200/80'
                   }`}

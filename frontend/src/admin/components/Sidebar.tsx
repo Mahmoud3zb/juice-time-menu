@@ -42,6 +42,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
     { to: "/admin/reports/daily", end: false, label: "تقارير اليوم", icon: <ReceiptLongOutlined /> },
     { to: "/admin/reports/monthly", end: false, label: "التقارير الشهرية", icon: <CalendarMonthOutlined /> },
     { to: "/admin/settings", end: false, label: "إعدادات", icon: <SettingsOutlined /> },
+    { to: "/admin/products", end: false, label: "المنيو والأسعار", icon: <RestaurantMenu /> },
   ];
 
   const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -88,13 +89,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
             sx={{
               width: 44,
               height: 44,
-              borderRadius: 3.5,
-              backgroundColor: "rgba(37, 99, 235, 0.2)",
-              border: "1px solid rgba(96, 165, 250, 0.3)",
+              borderRadius: 2,
+              backgroundColor: "rgba(0, 154, 116, 0.2)",
+              border: "1px solid rgba(5, 179, 135, 0.35)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "#60a5fa",
+              color: "#34d399",
             }}
           >
             <AccountBalanceWallet sx={{ fontSize: 24 }} />
@@ -103,7 +104,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
             <Typography variant="h6" sx={{ fontWeight: 900, color: "#ffffff", fontSize: "1.1rem", lineHeight: 1.2 }}>
               مصروفات المحل
             </Typography>
-            <Typography variant="caption" sx={{ color: "rgba(147, 197, 253, 0.6)", fontWeight: 700 }}>
+            <Typography variant="caption" sx={{ color: "rgba(167, 243, 208, 0.7)", fontWeight: 700 }}>
               عصير تايم JUICE TIME
             </Typography>
           </Box>
@@ -122,15 +123,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
               {({ isActive }) => (
                 <ListItemButton
                   sx={{
-                    borderRadius: 3.5,
+                    borderRadius: 1.5,
                     mb: 1,
-                    py: 1.4,
+                    py: 1.2,
                     px: 2,
-                    backgroundColor: isActive ? "#2563eb" : "transparent",
+                    backgroundColor: isActive ? "#009a74" : "transparent",
                     color: isActive ? "#ffffff" : "#94a3b8",
-                    boxShadow: isActive ? "0 8px 20px -4px rgba(37, 99, 235, 0.5)" : "none",
+                    boxShadow: isActive ? "0 4px 12px -2px rgba(0, 154, 116, 0.4)" : "none",
                     "&:hover": {
-                      backgroundColor: isActive ? "#1d4ed8" : "rgba(255, 255, 255, 0.05)",
+                      backgroundColor: isActive ? "#008262" : "rgba(255, 255, 255, 0.05)",
                       color: "#ffffff",
                     },
                   }}
@@ -170,7 +171,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
             alignItems: "center",
             justifyContent: "space-between",
             p: 1.2,
-            borderRadius: 3.5,
+            borderRadius: 2,
             backgroundColor: "rgba(255, 255, 255, 0.04)",
             cursor: "pointer",
             transition: "all 0.2s",
@@ -184,7 +185,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
               sx={{
                 width: 40,
                 height: 40,
-                bgcolor: "#2563eb",
+                bgcolor: "#009a74",
                 fontWeight: 900,
                 fontSize: "1rem",
               }}
@@ -214,10 +215,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
             paper: {
               sx: {
                 width: 220,
-                borderRadius: 4,
+                borderRadius: 2,
                 backgroundColor: "#16233b",
                 color: "#ffffff",
-                boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
                 border: "1px solid rgba(255, 255, 255, 0.1)",
                 mb: 1.5,
                 p: 0.5,
@@ -234,14 +235,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
             sx={{
               py: 1.2,
               px: 2,
-              borderRadius: 2.5,
+              borderRadius: 1.5,
               fontSize: "0.85rem",
               fontWeight: 700,
               gap: 1.5,
               "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.08)" },
             }}
           >
-            <RestaurantMenu sx={{ fontSize: 18, color: "#60a5fa" }} />
+            <RestaurantMenu sx={{ fontSize: 18, color: "#009a74" }} />
             <span>الذهاب للمنيو</span>
           </MenuItem>
 
@@ -255,7 +256,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
             sx={{
               py: 1.2,
               px: 2,
-              borderRadius: 2.5,
+              borderRadius: 1.5,
               fontSize: "0.85rem",
               fontWeight: 700,
               color: "#f87171",

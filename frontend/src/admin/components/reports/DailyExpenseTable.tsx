@@ -62,10 +62,10 @@ export const DailyExpenseTable: React.FC<DailyExpenseTableProps> = ({
   return (
     <Card
       sx={{
-        borderRadius: 4,
+        borderRadius: 2,
         border: "1px solid",
         borderColor: "divider",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
+        boxShadow: "0 2px 12px rgba(0,0,0,0.03)",
         p: { xs: 2, sm: 3 },
       }}
     >
