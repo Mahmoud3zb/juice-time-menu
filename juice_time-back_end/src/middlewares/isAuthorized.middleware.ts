@@ -7,8 +7,9 @@ export const isAuthorized = (...roles: Role[]): RequestHandler => {
     // console.log("req.user data:", (req as any).user);
     // console.log("Required roles from route:", roles);
 
-    if (req.user) {
-      if (roles.includes(req.user.role)) {
+    const user = (req as any).user;
+    if (user) {
+      if (roles.includes(user.role)) {
         next();
       } else { 
         res.status(403).json({ message: "Forbidden" });
