@@ -1,6 +1,16 @@
 import axios from "axios";
 
-export const API_BASE_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/+$/, "");
+const getDefaultApiUrl = (): string => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  if (typeof window !== "undefined" && (window.location.hostname.includes("vercel.app") || window.location.protocol === "https:")) {
+    return "https://juice-time-menu-backend.vercel.app";
+  }
+  return "http://localhost:3000";
+};
+
+export const API_BASE_URL = getDefaultApiUrl().replace(/\/+$/, "");
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
