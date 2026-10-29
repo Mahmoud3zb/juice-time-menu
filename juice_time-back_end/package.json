@@ -39,5 +39,10 @@
     "@types/multer": "^2.2.0",
     "@vercel/node": "^5.1.10",
     "typescript": "^7.0.2"
+  },
+  "overrides": {
+    "multer-storage-cloudinary": {
+      "cloudinary": "$cloudinary"
+    }
   }
 }
