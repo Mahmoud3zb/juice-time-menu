@@ -5,10 +5,10 @@ import mongoose from "mongoose";
 import { StatusCodes } from "http-status-codes";
 
 export const updateProductValidators = [
-    body("name").optional().not().isEmpty().withMessage("Name cannot be empty"),
-    body("prices.cup").optional().isNumeric().withMessage("Cup price must be a valid number"),
-    body("prices.liter").optional().isNumeric().withMessage("Liter price must be a valid number"),
-    body("type").optional().not().isEmpty().withMessage("Type cannot be empty"),
+    body("name").optional({ checkFalsy: true }).not().isEmpty().withMessage("Name cannot be empty"),
+    body("prices.cup").optional({ checkFalsy: true }).isNumeric().withMessage("Cup price must be a valid number"),
+    body("prices.liter").optional({ checkFalsy: true }).isNumeric().withMessage("Liter price must be a valid number"),
+    body("type").optional({ checkFalsy: true }).not().isEmpty().withMessage("Type cannot be empty"),
 ];
 
 interface IRequest {

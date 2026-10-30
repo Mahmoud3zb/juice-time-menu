@@ -5,7 +5,7 @@ import { addProductValidators, addProduct } from "./product-controller/add-produ
 import { deleteProduct } from "./product-controller/delete-product";
 import { isAuthenticated } from "../middlewares/isAuthenticated.middleware";
 import { getProducts } from "./product-controller/get-products";
-import { upload } from "../middlewares/upload";
+import { upload, uploadProductImage } from "../middlewares/upload";
 
 const router = Router();
 
@@ -15,7 +15,7 @@ router.get("/", getProducts);
 // Protected routes: Only authenticated admin/owner can add, update or delete products
 router.post("/",
     isAuthenticated,
-    upload.single("image"),
+    uploadProductImage,
     addProductValidators,
     handleValidationErrors,
     addProduct
@@ -23,7 +23,7 @@ router.post("/",
 
 router.put("/:id",
     isAuthenticated,
-    upload.single("image"),
+    uploadProductImage,
     updateProductValidators,
     handleValidationErrors,
     updateProduct

@@ -35,10 +35,15 @@ export const ProductImageUpload: React.FC<ProductImageUploadProps> = ({
           sx={{ borderRadius: 1.5, fontWeight: 800, fontSize: "0.8rem" }}
         >
           {imagePreview ? "تغيير الصورة" : "رفع صورة للمشروب"}
-          <input type="file" accept="image/*" hidden onChange={onImageChange} />
+          <input
+            type="file"
+            accept="image/*,.jfif,.avif,.webp,.heic,.jpg,.jpeg,.png,.PNG,.JPG"
+            hidden
+            onChange={onImageChange}
+          />
         </Button>
         <Typography variant="caption" sx={{ display: "block", color: "text.secondary", mt: 0.5 }}>
-          PNG أو JPG عالية الجودة
+          جميع الصيغ مدعومة (JPG, PNG, WebP, صور الفيسبوك وغيرها)
         </Typography>
       </Box>
     </Box>

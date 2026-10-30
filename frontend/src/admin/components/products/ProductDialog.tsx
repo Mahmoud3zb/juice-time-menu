@@ -82,6 +82,69 @@ export const ProductDialog: React.FC<ProductDialogProps> = ({
     return str.replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d).toString());
   };
 
+  /**
+   * Optimizes & converts Facebook / gallery images (JFIF, AVIF, HEIC, high-res)
+   * to a clean, fast-loading, standard JPEG under 500KB.
+   */
+  const optimizeImageFile = async (file: File): Promise<File> => {
+    return new Promise((resolve) => {
+      try {
+        const img = new Image();
+        const objectUrl = URL.createObjectURL(file);
+
+        img.onload = () => {
+          URL.revokeObjectURL(objectUrl);
+          const maxDim = 1200;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          if (!ctx) {
+            resolve(file);
+            return;
+          }
+
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                const cleanName = (file.name || "image").replace(/\.[^/.]+$/, "") + ".jpg";
+                const optimized = new File([blob], cleanName, { type: "image/jpeg" });
+                resolve(optimized);
+              } else {
+                resolve(file);
+              }
+            },
+            "image/jpeg",
+            0.88
+          );
+        };
+
+        img.onerror = () => {
+          URL.revokeObjectURL(objectUrl);
+          resolve(file);
+        };
+
+        img.src = objectUrl;
+      } catch {
+        resolve(file);
+      }
+    });
+  };
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -118,41 +181,43 @@ export const ProductDialog: React.FC<ProductDialogProps> = ({
       return;
     }
 
-    const formData = new FormData();
-    formData.append("name", trimmedName);
-    formData.append("type", trimmedType);
-    formData.append("priceType", priceType);
-    formData.append("prices.cup", String(parsedCup));
+    try {
+      setSaving(true);
 
-    if (priceType !== "single_price") {
-      const parsedLiter = parseFloat(normalizeDigits(literPrice));
-      if (!isNaN(parsedLiter) && parsedLiter > 0) {
-        formData.append("prices.liter", String(parsedLiter));
+      const formData = new FormData();
+      formData.append("name", trimmedName);
+      formData.append("type", trimmedType);
+      formData.append("priceType", priceType);
+      formData.append("prices.cup", String(parsedCup));
+
+      if (priceType !== "single_price") {
+        const parsedLiter = parseFloat(normalizeDigits(literPrice));
+        if (!isNaN(parsedLiter) && parsedLiter > 0) {
+          formData.append("prices.liter", String(parsedLiter));
+        } else {
+          formData.append("prices.liter", "");
+        }
       } else {
         formData.append("prices.liter", "");
       }
-    } else {
-      formData.append("prices.liter", "");
-    }
 
-    if (description.trim()) {
-      formData.append("description", description.trim());
-    }
+      if (description.trim()) {
+        formData.append("description", description.trim());
+      }
 
-    if (imageFile) {
-      formData.append("image", imageFile);
-    }
+      if (imageFile) {
+        const preparedImage = await optimizeImageFile(imageFile);
+        formData.append("image", preparedImage);
+      }
 
-    try {
-      setSaving(true);
       let response;
       if (isEditing && product) {
         response = await apiClient.put(`/api/products/${product._id}`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { "Content-Type": undefined },
         });
       } else {
         response = await apiClient.post("/api/products", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { "Content-Type": undefined },
         });
       }
 

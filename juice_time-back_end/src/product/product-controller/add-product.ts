@@ -6,8 +6,9 @@ import {body} from "express-validator";
 export const addProductValidators = [
     body("name").not().isEmpty().withMessage("Name is required"),
     body("prices.cup").not().isEmpty().withMessage("Cup price is required"),
+    body("prices.liter").optional({ checkFalsy: true }).isNumeric().withMessage("Liter price must be a valid number"),
     body("type").not().isEmpty().withMessage("Type is required"),
-]
+];
 
 interface IRequest {
     name: string;
