@@ -26,37 +26,51 @@ interface IResponse {
     message: string;
     data?: unknown;
 }
-export const updateProduct: RequestHandler <{ id: string },IResponse,IRequest> = async (req, res, next) => {
+export const updateProduct: RequestHandler <{ id: string }, IResponse, IRequest> = async (req, res, next) => {
     try {
         const { id } = req.params;
-        if(!mongoose.Types.ObjectId.isValid(id)) {
+        if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: "Product not found" });
         }
-        const updateObj: any = {};
-        const unsetObj: any = {};
+
+        const product = await Product.findById(id);
+        if (!product) {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: "Product not found" });
+        }
+
         const { name, prices, description, imageurl, type, priceType, order } = req.body;
-        if (name) updateObj.name = name;
-        if (order !== undefined) updateObj.order = Number(order);
+
+        if (name) product.name = name;
+        if (type) product.type = type;
+        if (order !== undefined) product.order = Number(order);
+        if (description !== undefined) product.description = description;
+        if (priceType) product.priceType = priceType;
 
         if (req.file?.path) {
-            updateObj.imageurl = req.file.path;
+            product.imageurl = req.file.path;
         } else if (imageurl) {
-            updateObj.imageurl = imageurl;
+            product.imageurl = imageurl;
         }
+
+        // Safely assemble updated prices object
+        let newPrices: { cup: number; liter?: number } = {
+            cup: product.prices?.cup || 0,
+            liter: product.prices?.liter,
+        };
 
         if (typeof prices === "string") {
             try {
-                updateObj.prices = JSON.parse(prices);
+                const parsed = JSON.parse(prices);
+                newPrices = { ...newPrices, ...parsed };
             } catch {
                 // fallback
             }
-        } else if (prices) {
-            updateObj.prices = { ...prices };
+        } else if (prices && typeof prices === "object") {
+            newPrices = { ...newPrices, ...prices };
         }
 
-        if (req.body["prices.cup"] !== undefined) {
-            updateObj.prices = updateObj.prices || {};
-            updateObj.prices.cup = Number(req.body["prices.cup"]);
+        if (req.body["prices.cup"] !== undefined && req.body["prices.cup"] !== "") {
+            newPrices.cup = Number(req.body["prices.cup"]);
         }
 
         const isRemovingLiter =
@@ -66,45 +80,24 @@ export const updateProduct: RequestHandler <{ id: string },IResponse,IRequest> =
             (prices && typeof prices === "object" && prices.liter === undefined && priceType === "single_price");
 
         if (isRemovingLiter) {
-            if (updateObj.prices) {
-                delete updateObj.prices.liter;
-            }
-            unsetObj["prices.liter"] = 1;
-        } else if (req.body["prices.liter"] !== undefined) {
-            updateObj.prices = updateObj.prices || {};
-            updateObj.prices.liter = Number(req.body["prices.liter"]);
+            delete newPrices.liter;
+            product.prices = { cup: newPrices.cup };
+            // Mark modified so mongoose replaces the subdocument completely
+            product.markModified("prices");
+        } else if (req.body["prices.liter"] !== undefined && req.body["prices.liter"] !== "") {
+            newPrices.liter = Number(req.body["prices.liter"]);
+            product.prices = newPrices;
+            product.markModified("prices");
+        } else {
+            product.prices = newPrices;
+            product.markModified("prices");
         }
 
-        if (priceType) {
-            updateObj.priceType = priceType;
-        }
-
-        if (description !== undefined) {
-            updateObj.description = description;
-        }
-
-        if (type) updateObj.type = type;
-
-        const updateQuery: any = { $set: updateObj };
-        if (Object.keys(unsetObj).length > 0) {
-            updateQuery.$unset = unsetObj;
-        }
-
-        const updatedProduct = await Product.findByIdAndUpdate(
-            id,
-            updateQuery,
-            { new: true, runValidators: true }
-        );
-
-        if (!updatedProduct) {
-            return res.status(StatusCodes.NOT_FOUND).json({ message: "Product not found",
-            data: updatedProduct
-            });
-        }
+        await product.save();
 
         res.status(StatusCodes.OK).json({ 
             message: "Product updated successfully", 
-            data: updatedProduct 
+            data: product 
         });
     } catch (err) {
         next(err);
